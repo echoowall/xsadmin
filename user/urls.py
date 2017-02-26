@@ -3,9 +3,12 @@
 '''
 @author: alishtory
 @site: https://github.com/alishtory/xsadmin
-@time: 2017/2/26 18:10
+@time: 2017/2/26 18:23
 '''
-from django.conf import settings
 
-def site_config(request):
-    return settings.SITE_CONFIG
+from django.conf.urls import url
+from .views import *
+
+urlpatterns = [
+
+]
