@@ -1,10 +1,85 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>注册</title>
-</head>
-<body>
+{% extends 'home/layout.html' %}
+{% block title %}用户注册{% endblock %}
+{% block content %}
+<!-- #region Registration Form -->
+<div class="eternity-form container">
+    <div class="registration-form-section">
+        <form>
+            <div class="section-title reg-header " data-animation="fadeInDown">
+                <h3>注册新账户</h3>
+            </div>
+            <div class="clearfix">
+                <div class="col-sm-6 registration-left-section  " data-animation="fadeInUp">
+                    <div class="reg-content">
+                        <div class="textbox-wrap">
+                            <div class="input-group">
+                                <span class="input-group-addon "><i class="icon-user icon-color"></i></span>
+                                <input type="text" class="form-control " placeholder="FirstName" required="required" />
+                            </div>
+                        </div>
+                        <div class="textbox-wrap">
+                            <div class="input-group">
+                                <span class="input-group-addon "><i class="icon-user icon-color"></i></span>
+                                <input type="text" class="form-control " placeholder="LastName" required="required" />
+                            </div>
+                        </div>
+                        <div class="textbox-wrap">
+                            <div class="input-group">
+                                <span class="input-group-addon "><i class="icon-envelope icon-color"></i></span>
+                                <input type="email" class="form-control " placeholder="Email Id" required="required" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 registration-right-section " data-animation="fadeInUp">
+                    <div class="reg-content">
+                        <div class="textbox-wrap">
+                            <div class="input-group">
+                                <span class="input-group-addon "><i class="icon-user icon-color"></i></span>
+                                <input type="text" class="form-control " placeholder="UserName" required="required" />
+                            </div>
+                        </div>
+                        <div class="textbox-wrap">
+                            <div class="input-group">
+                                <span class="input-group-addon "><i class="icon-key icon-color"></i></span>
+                                <input type="password" class="form-control " placeholder="Password" required="required" />
+                            </div>
+                        </div>
+                        <div class="textbox-wrap">
+                            <div class="input-group">
+                                <span class="input-group-addon "><i class="icon-key icon-color"></i></span>
+                                <input type="password" class="form-control " placeholder="Confirm-Password" required="required" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="registration-form-action clearfix " data-animation="fadeInUp" data-animation-delay=".15s">
+                <a href="#demo1" class="btn btn-success pull-left blue-btn ">
+                    <i class="icon-chevron-left"></i>&nbsp; &nbsp;Back To Login
+                </a>
+                <button type="submit" class="btn btn-success pull-right green-btn ">Register Now &nbsp; <i class="icon-chevron-right"></i></button>
 
-</body>
-</html>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+    <script src="//cdn.bootcss.com/jquery-placeholder/2.3.1/jquery.placeholder.min.js"></script>
+    <script src="//cdn.bootcss.com/iCheck/1.0.2/icheck.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("input").iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                increaseArea: '20%' // optional
+            });
+
+            $(".form-control").focus(function () {
+                $(this).closest(".textbox-wrap").addClass("focused");
+            }).blur(function () {
+                $(this).closest(".textbox-wrap").removeClass("focused");
+            });
+        });
+    </script>
+{% endblock %}

@@ -15,4 +15,4 @@ class DownloadView(BaseHomeView):
     template_name = 'home/download.html'
 
 class AboutView(BaseHomeView):
-    template_name = 'home/about.html'
+    template_name = 'user/forgot_password.html'

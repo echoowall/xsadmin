@@ -1,0 +1,786 @@
+/* ==========================================================================
+ 	Global
+ ========================================================================== */
+
+html,
+body {
+	/*font-family: 'Microsoft YaHei UI', sans-serif;
+	font-weight:400;*/
+    font: 14px/1.6 Monda,PingFang SC,Microsoft YaHei,sans-serif;
+	color:#6f6f6f;
+	overflow-x:hidden;
+	-webkit-font-smoothing: antialiased;
+	background-color: #f7f7f7;
+}
+
+ul {
+	margin:0;
+	padding:0;
+    list-style:none;
+}
+
+a {
+	color: #2780BC;
+}
+
+a,
+a:hover,
+a:focus,
+input:focus {
+	text-decoration:none;
+	outline: none;
+	color:#02743a;
+}
+
+img {
+	max-width: 100%;
+}
+
+section {
+  min-width: 100%;
+  position: relative;
+  width: 100%;
+  padding: 50px 0;
+}
+
+a:active,
+a:focus, button:focus, .btn:focus,
+input:focus, textarea:focus, select:focus, .form-control:focus {
+    outline: none !important;
+    text-decoration: none !important;
+    box-shadow: none !important;
+}
+
+.form-control {
+	box-shadow:none;
+	-webkit-box-shadow:none;
+	border: 1px solid #e3e3e3;
+	height:44px;
+	color:#000;
+}
+
+.form-control:focus {
+	border-color: #2780BC;
+}
+
+.title {
+	/*line-height: 34px;*/
+	color: #ffffff;
+	font-weight: 700;
+}
+
+.parallax-section {
+	position: relative;
+	background-repeat: no-repeat;
+ 	background-size: cover;
+ }
+
+.parallax-section:before {
+ 	position: absolute;
+ 	background-color: rgba(35, 174, 121, 0.94);
+ 	top: 0;
+ 	left: 0;
+ 	width: 100%;
+ 	height: 100%;
+ 	min-height: 264px;
+ 	display:block;
+ 	content:"";
+ }
+
+.section {
+	background-color:#fff;
+	border-radius:4px;
+	padding:35px 25px;
+	margin-bottom:25px;
+}
+
+.section-title h4{
+	color:#000;
+	font-weight: 500;
+}
+
+textarea {
+	resize:none;
+}
+
+.btn.btn-primary {
+	font-size:18px;
+	font-weight:400;
+	text-transform:capitalize;
+	background-color:#2780BC;
+	padding:10px 40px 12px;
+	border:0;
+	-webkit-transition: all 0.3s ease-in-out;
+	-moz-transition: all 0.3s ease-in-out;
+	-ms-transition: all 0.3s ease-in-out;
+	-o-transition: all 0.3s ease-in-out;
+	transition: all 0.3s ease-in-out;
+}
+
+.btn.btn-primary:hover {
+	background-color:#0072bc;
+	color:#fff;
+}
+
+.navbar-default .navbar-toggle {
+	border-color:#2780BC;
+}
+
+.navbar-default .navbar-toggle .icon-bar{
+	background-color: #2780BC;
+}
+
+.navbar-default .navbar-toggle:focus,
+.navbar-default .navbar-toggle:hover {
+	background-color: transparent;
+}
+
+
+/* Breadcrumb */
+
+.breadcrumb-section h2.title {
+	margin-top: 0;
+	margin-bottom: 32px;
+}
+
+.breadcrumb-section .breadcrumb {
+	margin-bottom: 0;
+	margin: 0;
+	padding: 0;
+}
+
+
+/* ==========================================================================
+ 	Header
+ ========================================================================== */
+
+#header .navbar-default {
+    padding: 4px 0;
+    background: #fff;
+    border: none;
+ }
+
+.navbar-brand {
+	padding: 0px 15px;
+	height: inherit;
+}
+.navbar-brand>img{
+    display: inline-block;}
+.navbar-brand .site-title{
+    display: inline-block;margin-left: 15px}
+
+.navbar {
+	margin: 0;
+}
+
+.nav li a,
+.navbar-default .navbar-nav>li>a {
+	background-color: transparent;
+	font-weight: 500;
+	font-size: 14px;
+	color: #0a0a0a;
+	padding: 15px 12px;
+	text-transform: uppercase;
+}
+
+.nav li a:hover,
+.navbar-default .navbar-nav>li>a:focus,
+.navbar-default .navbar-nav>li>a:hover,
+.navbar-default .navbar-nav>.active>a:focus,
+.navbar-default .navbar-nav>.active>a:hover,
+.navbar-default .navbar-nav>.active>a,
+.navbar-default .navbar-nav>.open>a,
+.navbar-default .navbar-nav>.open>a:focus,
+.navbar-default .navbar-nav>.open>a:hover,
+.dropdown-menu>.active>a,
+.dropdown-menu>.active>a:focus,
+.dropdown-menu>.active>a:hover,
+.navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+.navbar-default .navbar-nav .open .dropdown-menu > li > a:focus,
+.navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+.navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus,
+ .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover {
+	background-color: transparent;
+	color: #2780BC;
+}
+
+
+.dropdown-menu {
+	border-radius: 0;
+}
+
+.navbar-nav .dropdown-menu>li>a {
+	padding: 6px 20px;
+	font-size:13px;
+}
+
+.dropdown-menu>li>a,
+.dropdown-menu>li>a:hover {
+	background-color:transparent;
+}
+
+.nav-right {
+	margin-top: 4px;
+	text-align: right;
+}
+
+.language-dropdown {
+	display:inline;
+	margin-right: 10px;
+}
+
+.language-dropdown a {
+	font-size: 16px;
+	color: #252525;
+	line-height: 23px;
+}
+
+.language-dropdown a i {
+	margin-left: 5px;
+}
+
+.language-dropdown a:hover {
+	color:#2780BC;
+}
+
+.language-dropdown li>a {
+	display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: 400;
+    color: #333;
+}
+
+.sign-in {
+	display:inline;
+}
+
+.sign-in li {
+	display:inline-block;
+	margin-top: 10px;
+}
+
+.language-dropdown i.fa-globe,
+.sign-in li i {
+	font-size: 14px;
+	color: #2780BC;
+	margin-right: 5px;
+}
+
+.sign-in li:last-child {
+	position: relative;
+	padding-left: 10px;
+}
+
+.nav-right .dropdown-menu {
+    margin: 18px 0 20px;
+}
+
+.nav-right .dropdown-menu li a:hover {
+	color: #2780BC;
+	background-color: transparent;
+}
+
+.sign-in li a {
+	color: #000000;
+	font-size: 14px;
+}
+
+.sign-in li a:hover {
+	color: #2780BC;
+}
+
+#header a.btn,
+.download-button a.btn {
+	padding: 5px 25px 7px;
+	background-color: #0072bc;
+	font-weight: 400;
+	font-size: 14px;
+	color: #fff;
+	margin-left: 20px;
+}
+
+#header a.btn:hover,
+.download-button a.btn:hover {
+	background-color: #2780BC;
+}
+
+.badge {
+	background-color: #2780BC;
+	margin-left: 5px;
+	font-size: 10px;
+	font-weight: 500;
+	padding-bottom: 2px;
+}
+
+.img-logo{
+    height:50px;
+}
+
+/* ==========================================================================
+ 	Banner Job
+========================================================================== */
+
+.banner-job {
+	background-image: url(../images/banner-1.jpg);
+	background-repeat: no-repeat;
+	background-size: cover;
+	color: #fff;
+	/*position: relative;*/
+	z-index: 1;
+	padding: 120px 0 130px;
+}
+
+.banner-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: -1;
+	background-color: rgba(40, 45, 50, 0.9);
+}
+
+.banner-job h1 {
+	font-size: 51px;
+}
+
+.banner-job h3 {
+	font-size: 22px;
+	font-weight: 300;
+	margin: 25px 0 30px;
+}
+
+#header{
+	border-bottom: 1px solid #e3e3e3;
+    -webkit-box-shadow: 0 1px 0 rgba(255,255,255,0.5);
+    -moz-box-shadow: 0 1px 0 rgba(255,255,255,0.5);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.5);
+}
+
+/**
+登录注册部分
+**/
+.eternity-form .login-form-section,
+.eternity-form .forgot-password-section {
+  width: 100%;
+  max-width: 360px;
+  margin: 30px auto 0;
+}
+.eternity-form .login-content,
+.eternity-form .forgot-password-section,
+.eternity-form .reg-content {
+  background-color: white;
+  -o-box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+  -ms-box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+}
+.eternity-form .section-title {
+  padding: 10px 20px;
+  background-color: white;
+}
+.eternity-form .section-title h3 {
+  color: #3498db;
+}
+.eternity-form .textbox-wrap {
+  padding: 20px 20px 20px 15px;
+  border-left: 5px solid transparent;
+  -moz-transition: border-left-color 0.5s, box-shadow 0.5s, background-color 0.5s;
+  -o-transition: border-left-color 0.5s, box-shadow 0.5s, background-color 0.5s;
+  -webkit-transition: border-left-color 0.5s, box-shadow 0.5s, background-color 0.5s;
+  transition: border-left-color 0.5s, box-shadow 0.5s, background-color 0.5s;
+}
+.eternity-form .textbox-wrap .input-group {
+  border: 1px solid #e0e0e0;
+  background-color: #ffffff;
+}
+.eternity-form .textbox-wrap .input-group .input-group-addon,
+.eternity-form .textbox-wrap .input-group input,
+.eternity-form .textbox-wrap .input-group .form-control {
+  background-color: transparent;
+  border: none;
+}
+.eternity-form .textbox-wrap .input-group input,
+.eternity-form .textbox-wrap .input-group .form-control,
+.eternity-form .textbox-wrap .input-group input:focus,
+.eternity-form .textbox-wrap .input-group .form-control:focus {
+  box-shadow: none;
+  outline: none;
+}
+.eternity-form .textbox-wrap .input-group [class^="icon-"],
+.eternity-form .textbox-wrap .input-group [class*=" icon-"],
+.eternity-form .textbox-wrap .input-group i {
+  color: #cccccc;
+}
+.eternity-form .textbox-wrap.focused {
+  border-left-color: #3498db;
+  background-color: #f0f0f0;
+  -o-box-shadow: inset 0 0 3px rgba(0,0,0,.1);
+  -ms-box-shadow: inset 0 0 3px rgba(0,0,0,.1);
+  -moz-box-shadow: inset 0 0 3px rgba(0,0,0,.1);
+  -webkit-box-shadow: inset 0 0 3px rgba(0,0,0,.1);
+  box-shadow: inset 0 0 3px rgba(0,0,0,.1);
+}
+.eternity-form .green-btn,
+.eternity-form .green-btn:hover,
+.eternity-form .blue-btn {
+  background-color: #2ecc71;
+  border: none;
+}
+.eternity-form .blue-btn,
+.eternity-form .blue-btn:hover {
+  background-color: #2980b9;
+}
+.eternity-form .login-form-action {
+  padding: 15px 20px 30px 20px;
+}
+.eternity-form input[type="checkbox"] {
+  width: 30px;
+}
+.eternity-form .blue {
+  color: #3498db;
+}
+.eternity-form .green {
+  color: #2ecc71;
+}
+.eternity-form .login-form-links {
+  padding: 20px;
+  margin-top: 5px;
+  -o-box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+  -ms-box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+  background-color: white;
+}
+.eternity-form .login-form-links a.blue:hover,
+.eternity-form .login-form-links a a.blue:focus {
+  color: #3498db;
+  text-decoration: underline;
+}
+.eternity-form .login-form-links a.green:hover,
+.eternity-form .login-form-links a a.green:focus {
+  color: #2ecc71;
+  text-decoration: underline;
+}
+.eternity-form .forget-form-action {
+  padding: 20px;
+}
+.eternity-form .registration-form-section {
+  max-width: 620px;
+  margin: 30px auto 0;
+  width: 100%;
+}
+.eternity-form .reg-header {
+  -o-box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+  -ms-box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+}
+.eternity-form .registration-left-section {
+  padding-left: 0;
+  padding-right: 2.5px;
+}
+.eternity-form .registration-right-section {
+  padding-left: 2.5px;
+  padding-right: 0;
+}
+.eternity-form .reg-content {
+  margin-top: 5px;
+  padding: 20px 0;
+}
+.eternity-form .registration-form-action {
+  margin-top: 5px;
+  padding: 20px;
+  -o-box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+  -ms-box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+  background-color: white;
+}
+.eternity-form .custom-checkbox {
+  float: left;
+}
+.eternity-form .checkbox {
+  display: inline-block;
+  padding-left: 1px;
+  margin-top: 7px;
+  margin-bottom: 0;
+}
+.eternity-form .checkbox-text {
+  line-height: 24px;
+  padding-left: 5px;
+}
+.eternity-form .form-control:-moz-placeholder {
+  font-weight: 300;
+}
+.eternity-form .form-control::-moz-placeholder {
+  font-weight: 300;
+}
+.eternity-form .form-control:-ms-input-placeholder {
+  font-weight: 300;
+}
+.eternity-form .form-control::-webkit-input-placeholder {
+  font-weight: 300;
+}
+.eternity-form.dark,
+.eternity-form .dark {
+  color: #ffffff;
+}
+.eternity-form.dark .checkbox,
+.eternity-form .dark .checkbox {
+  margin-left: -7px;
+}
+.eternity-form.dark .checkbox .checkbox-text,
+.eternity-form .dark .checkbox .checkbox-text {
+  line-height: 28px;
+}
+.eternity-form.dark .form-control,
+.eternity-form .dark .form-control {
+  color: white;
+}
+.eternity-form.dark .form-control:-moz-placeholder,
+.eternity-form .dark .form-control:-moz-placeholder {
+  color: #959595;
+}
+.eternity-form.dark .form-control::-moz-placeholder,
+.eternity-form .dark .form-control::-moz-placeholder {
+  color: #959595;
+}
+.eternity-form.dark .form-control:-ms-input-placeholder,
+.eternity-form .dark .form-control:-ms-input-placeholder {
+  color: #959595;
+}
+.eternity-form.dark .form-control::-webkit-input-placeholder,
+.eternity-form .dark .form-control::-webkit-input-placeholder {
+  color: #959595;
+}
+.eternity-form.dark .login-content,
+.eternity-form .dark .login-content,
+.eternity-form.dark .forgot-password-section,
+.eternity-form .dark .forgot-password-section,
+.eternity-form.dark .reg-content,
+.eternity-form .dark .reg-content {
+  background-color: #464646;
+}
+.eternity-form.dark .section-title,
+.eternity-form .dark .section-title {
+  background-color: #464646;
+}
+.eternity-form.dark .section-title h3,
+.eternity-form .dark .section-title h3 {
+  color: #34dbce;
+}
+.eternity-form.dark .textbox-wrap .input-group,
+.eternity-form .dark .textbox-wrap .input-group {
+  border: 1px solid #464646;
+  background-color: #383838;
+}
+.eternity-form.dark .textbox-wrap .input-group [class^="icon-"],
+.eternity-form .dark .textbox-wrap .input-group [class^="icon-"],
+.eternity-form.dark .textbox-wrap .input-group [class*=" icon-"],
+.eternity-form .dark .textbox-wrap .input-group [class*=" icon-"],
+.eternity-form.dark .textbox-wrap .input-group i,
+.eternity-form .dark .textbox-wrap .input-group i {
+  color: #cccccc;
+}
+.eternity-form.dark .textbox-wrap.focused,
+.eternity-form .dark .textbox-wrap.focused {
+  border-left: 5px solid #3498db;
+  background-color: #3b3b3b;
+  -o-box-shadow: inset 0 0 3px rgba(0,0,0,.1);
+  -ms-box-shadow: inset 0 0 3px rgba(0,0,0,.1);
+  -moz-box-shadow: inset 0 0 3px rgba(0,0,0,.1);
+  -webkit-box-shadow: inset 0 0 3px rgba(0,0,0,.1);
+  box-shadow: inset 0 0 3px rgba(0,0,0,.1);
+}
+.eternity-form.dark .icon-color,
+.eternity-form .dark .icon-color {
+  color: white;
+}
+.eternity-form.dark .input-group-addon1,
+.eternity-form .dark .input-group-addon1 {
+  background-color: #2d2d2d;
+  border: none;
+}
+.eternity-form.dark .addon,
+.eternity-form .dark .addon {
+  border: 1px solid #c5c5c5;
+  background-color: #393939;
+}
+.eternity-form.dark .green-btn,
+.eternity-form .dark .green-btn,
+.eternity-form.dark .green-btn:hover,
+.eternity-form .dark .green-btn:hover,
+.eternity-form.dark .blue-btn,
+.eternity-form .dark .blue-btn {
+  background-color: #ffffff;
+  color: #464646;
+}
+.eternity-form.dark .blue-btn,
+.eternity-form .dark .blue-btn,
+.eternity-form.dark .blue-btn:hover,
+.eternity-form .dark .blue-btn:hover {
+  background-color: #ffffff;
+  color: #464646;
+}
+.eternity-form.dark .blue,
+.eternity-form .dark .blue {
+  color: #34dbce;
+}
+.eternity-form.dark .green,
+.eternity-form .dark .green {
+  color: #3498db;
+}
+.eternity-form.dark .login-form-links,
+.eternity-form .dark .login-form-links {
+  background-color: #464646;
+}
+.eternity-form.dark .login-form-links a.blue:hover,
+.eternity-form .dark .login-form-links a.blue:hover,
+.eternity-form.dark .login-form-links a a.blue:focus,
+.eternity-form .dark .login-form-links a a.blue:focus {
+  color: #34dbce;
+}
+.eternity-form.dark .login-form-links a.green:hover,
+.eternity-form .dark .login-form-links a.green:hover,
+.eternity-form.dark .login-form-links a a.green:focus,
+.eternity-form .dark .login-form-links a a.green:focus {
+  color: #3498db;
+}
+.eternity-form.dark .registration-form-action,
+.eternity-form .dark .registration-form-action {
+  background-color: #464646;
+}
+.eternity-form.dark .checkbox,
+.eternity-form .dark .checkbox {
+  margin-top: 4px;
+}
+.eternity-form .radio label,
+.eternity-form .checkbox label {
+  font-weight: 300;
+}
+/*
+.eternity-form .icheckbox_polaris,
+.eternity-form .iradio_polaris {
+  display: block;
+  margin: 0;
+  padding: 0;
+  width: 29px;
+  height: 29px;
+  background: url(../images/polaris.png) no-repeat;
+  border: none;
+  cursor: pointer;
+}
+.eternity-form .icheckbox_polaris {
+  background-position: 0 0;
+}
+.eternity-form .icheckbox_polaris.hover {
+  background-position: -31px 0;
+}
+.eternity-form .icheckbox_polaris.checked {
+  background-position: -62px 0;
+}
+.eternity-form .icheckbox_polaris.disabled {
+  background-position: -93px 0;
+  cursor: default;
+}
+.eternity-form .icheckbox_polaris.checked.disabled {
+  background-position: -124px 0;
+}
+.eternity-form .iradio_polaris {
+  background-position: -155px 0;
+}
+.eternity-form .iradio_polaris.hover {
+  background-position: -186px 0;
+}
+.eternity-form .iradio_polaris.checked {
+  background-position: -217px 0;
+}
+.eternity-form .iradio_polaris.disabled {
+  background-position: -248px 0;
+  cursor: default;
+}
+.eternity-form .iradio_polaris.checked.disabled {
+  background-position: -279px 0;
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (min-device-pixel-ratio: 1.5) {
+  .eternity-form .icheckbox_polaris,
+  .eternity-form .iradio_polaris {
+    background-image: url(../images/polaris@2x.png);
+    -webkit-background-size: 310px 31px;
+    background-size: 310px 31px;
+  }
+}*/
+.eternity-form .icheckbox_square-blue,
+.eternity-form .iradio_square-blue {
+  display: block;
+  margin: 0;
+  padding: 0;
+  width: 22px;
+  height: 22px;
+  background: url(../images/blue.png) no-repeat;
+  border: none;
+  cursor: pointer;
+}
+.eternity-form .icheckbox_square-blue {
+  background-position: 0 0;
+}
+.eternity-form .icheckbox_square-blue.hover {
+  background-position: -24px 0;
+}
+.eternity-form .icheckbox_square-blue.checked {
+  background-position: -48px 0;
+}
+.eternity-form .icheckbox_square-blue.disabled {
+  background-position: -72px 0;
+  cursor: default;
+}
+.eternity-form .icheckbox_square-blue.checked.disabled {
+  background-position: -96px 0;
+}
+.eternity-form .iradio_square-blue {
+  background-position: -120px 0;
+}
+.eternity-form .iradio_square-blue.hover {
+  background-position: -144px 0;
+}
+.eternity-form .iradio_square-blue.checked {
+  background-position: -168px 0;
+}
+.eternity-form .iradio_square-blue.disabled {
+  background-position: -192px 0;
+  cursor: default;
+}
+.eternity-form .iradio_square-blue.checked.disabled {
+  background-position: -216px 0;
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (min-device-pixel-ratio: 1.5) {
+  .eternity-form .icheckbox_square-blue,
+  .eternity-form .iradio_square-blue {
+    background-image: url(../images/blue@2x.png);
+    -webkit-background-size: 240px 24px;
+    background-size: 240px 24px;
+  }
+}
+@media (max-width: 767px) {
+  .eternity-form .registration-left-section {
+    padding-right: 0px;
+  }
+  .eternity-form .registration-right-section {
+    padding-left: 0px;
+  }
+}
+@media (max-width: 380px) {
+  .eternity-form .blue-btn,
+  .eternity-form .green-btn {
+    font-size: .8em;
+  }
+}
+/**
+登录注册部分结束
+*/
