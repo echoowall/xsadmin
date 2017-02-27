@@ -24,6 +24,8 @@ DATABASES = {
     }
 }
 
+STATIC_ROOT = "/var/www/example.com/static/"
+
 SITE_CONFIG = {
     'SITE_NAME':'XS Admin',
     'SITE_DESC':'One powerful tool...',
