@@ -1,0 +1,46 @@
+{% extends './layout.html' %}{% load static %}
+{% block title %}节点列表{% endblock %}
+{% block content %}
+<section class="box">
+    <header class="panel_header">
+        <h2 class="title pull-left">节点列表</h2>
+    </header>
+<div class="content-body">
+    <div class="row">
+        <div class="col-xs-12 tab-content node-lists">
+        <div role="tabpanel" class="">
+            {% for i in '12345'|make_list %}
+            <div class="job-ad-item">
+                <div class="item-info">
+                    <div class="item-image-box">
+                        <div class="item-image">
+                            <a href="job-details.html"><img src="{% static 'images/logo.png' %}" alt="Image" class="img-responsive"></a>
+                        </div><!-- item-image -->
+                    </div>
+
+                    <div class="ad-info">
+                        <div class="node-title">美国洛杉矶G口优化</div>
+                        <div class="node-info">太平洋西海岸，大水管</div>
+                        <div class="ad-meta">
+                            <ul>
+                                <li><i class="fa fa-map-marker" aria-hidden="true"></i>San Francisco, CA, US</li>
+                                <li><i class="fa fa-clock-o" aria-hidden="true"></i><code>rc4-md5</code></li>
+                                <li><i class="fa fa-money" aria-hidden="true"></i>在线</li>
+                                <li><i class="fa fa-tags" aria-hidden="true"></i>G口、大水管</li>
+                            </ul>
+                        </div><!-- ad-meta -->
+                    </div><!-- ad-info -->
+                    <div class="button">
+                        <a href="javascript:void(0)"><i class="fa fa-qrcode icon-xs icon-accent animated bounceIn"></i> 节点二维码</a>　
+                        <a href="javascript:void(0)"><i class="fa fa-cloud icon-xs icon-success animated rotateIn"></i> 详细信息</a>
+                    </div>
+                </div><!-- item-info -->
+            </div><!-- ad-item -->
+            {% endfor %}
+
+        </div>
+        </div>
+    </div>
+</div>
+</section>
+{% endblock %}

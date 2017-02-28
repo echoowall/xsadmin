@@ -27,7 +27,14 @@
 <!-- START CONTAINER -->
 <div class="page-container row-fluid container-fluid">
 {% include './sidebar.html' %}
-{% block content %}{% endblock %}
+    <!-- START CONTENT -->
+    <section id="main-content">
+        <section class="wrapper main-wrapper row">
+            <!-- MAIN CONTENT AREA STARTS -->
+            {% include './breadcrumb.html' %}
+            <div class="col-lg-12">{% block content %}{% endblock %}</div>
+        </section>
+    </section>
 </div>
 <script src="//cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>

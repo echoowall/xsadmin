@@ -4443,3 +4443,178 @@ border-left: 3px solid transparent;
 .uibadges .badge {
     margin: 5px 5px 0 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/******
+自定义的
+*/
+.ad-section img {
+	display: inline;
+}
+
+.item-image {
+	position:relative;
+}
+
+.item-image img {
+	width:100%;
+	-webkit-transition: all 0.5s ease-in-out;
+	-moz-transition: all 0.5s ease-in-out;
+	-ms-transition: all 0.5s ease-in-out;
+	-o-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
+}
+
+.job-ad-item:hover .item-image img {
+	-moz-transform: scale(1.05) rotate(2deg);
+	-webkit-transform: scale(1.05) rotate(2deg);
+	-o-transform: scale(1.05) rotate(2deg);
+	-ms-transform: scale(1.05) rotate(2deg);
+	transform: scale(1.05) rotate(2deg);
+}
+
+.item-image-box, .item-info {
+	padding: 0;
+    margin: 0;
+}
+
+.item-image-box {
+	overflow:hidden;
+}
+
+.latest-jobs-ads {
+	margin-bottom: 15px;
+	background-color: #fff;
+	padding: 15px 30px;
+}
+
+.job-ad-item img {
+	width: inherit;
+}
+
+.job-ad-item {
+	padding: 15px;
+	overflow: hidden;
+	position: relative;
+	border: 1px solid #ececec;
+	margin: 18px 0;
+	border-radius:2px;
+    box-shadow: 0 1px 3px rgba(210, 210, 210, 0.2);
+    -webkit-box-shadow: 0 1px 3px rgba(210, 210, 210, 0.2);
+    -moz-box-shadow: 0 1px 3px rgba(210, 210, 210, 0.2);
+    -o-box-shadow: 0 1px 3px rgba(210, 210, 210, 0.2);
+    -ms-box-shadow: 0 1px 3px rgba(210, 210, 210, 0.2);
+}
+
+.job-ad-item .ad-meta {
+	position: inherit;
+	background-color: transparent;
+	border-top: none;
+	padding-left: 0;
+	min-height: inherit;
+	display: inline;
+}
+
+.job-ad-item .ad-meta li {
+	float: left;
+	margin-left: 20px;
+}
+
+.job-ad-item .item-image-box,
+.job-ad-item .ad-info {
+	float: left;
+}
+
+.job-ad-item .ad-info {
+	padding: 5px 25px;
+}
+
+.job-ad-item .ad-info .node-title {
+	color: #000;
+	font-size: 20px;
+	display: block;
+	margin-bottom: 10px;
+}
+
+.job-ad-item .ad-info span a {
+	color: #000;
+	font-size: 20px;
+	font-weight: 300;
+}
+
+.job-ad-item .ad-info a.title {
+	font-weight: 300;
+	color: #000;
+	font-weight: 500;
+}
+
+.job-ad-item .ad-meta li:first-child {
+	margin-left: 0;
+}
+
+.job-ad-item .ad-meta a,
+.job-ad-item .ad-meta li {
+	font-size: 14px;
+	color: #a0a0a0;
+}
+
+.job-ad-item .ad-meta i,
+.job-ad-item .ad-meta a i {
+	font-size: 20px;
+	margin-right: 10px;
+}
+
+
+.job-ad-item .button {
+	float: right;
+}
+
+.job-ad-item .item-image {
+    width: 100px;
+    border: 1px solid #f3f3f3;
+    overflow: hidden;
+}
+
+.job-ad-item .item-info {
+	min-height: 0;
+	overflow: hidden;
+}
+
+.latest-jobs-ads .nav-tabs>li>a {
+	margin-right: 0;
+}
+
+/* Job Details */
+
+.job-details .job-ad-item {
+	border: 0;
+	margin: 0 0 20px;
+	padding: 35px 25px;
+}
+
+.job-details .job-ad-item.section {
+	padding-bottom: 50px;
+}
+
+.tab-content.node-lists{
+    border: none;
+    padding-top: 0px;
+    margin-top: -18px;
+}
+.node-lists .ad-meta ul{
+    list-style: none;
+    padding: 0;
+}
+
