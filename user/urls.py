@@ -8,7 +8,13 @@
 
 from django.conf.urls import url
 from .views import *
+from django.views.generic import TemplateView
+
+class TemplateAutoView(TemplateView):
+    def get_template_names(self):
+        return 'user/'+self.kwargs['template_name']+'.html'
+
 
 urlpatterns = [
-
+    url(r'^tp/(?P<template_name>\w+).html$',TemplateAutoView.as_view()),
 ]
