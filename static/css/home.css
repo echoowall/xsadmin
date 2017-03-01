@@ -781,6 +781,89 @@ textarea {
     font-size: .8em;
   }
 }
+form .val-error {
+	color: #ffffff;
+    font-weight: 400;
+    font-size: 13px;
+}
+/*---------------------------------------------
+    Alert Notifications
+----------------------------------------------*/
+
+.alert {
+    border-radius: 0px;
+    -o-border-radius: 0px;
+    -ms-border-radius: 0px;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    text-shadow: none;
+    background: #eaeaea;
+}
+.alert-warning {
+    border: 1px solid #FFC107;
+    background: #FFC107;
+    color: #ffffff;
+}
+.alert-success {
+    border: 1px solid #4CAF50;
+    background: #4CAF50;
+    color: #ffffff;
+}
+.alert-info {
+    border: 1px solid #03A9F4;
+    background: #03A9F4;
+    color: #ffffff;
+}
+.alert-danger, .alert-error {
+    border: 1px solid #f44336;
+    background: #f44336;
+    color: #ffffff;
+}
+.alert button.close span {
+    color: #ffffff;
+}
+.alert button.close {
+    opacity: 0.6;
+}
+.alert {
+    padding: 15px 35px 15px 15px;
+    text-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    border: none;
+}
+.alert *, .alert a {
+    color: #ffffff;
+}
+.alert a {
+    font-weight: bold;
+}
+.alert button.close span {
+    color: #ffffff;
+    opacity: 0.7;
+}
+.alert button.close {
+    opacity: 1;
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 25px;
+}
+.alert-default *, .alert-default a, .alert-default {
+    color: #777777;
+}
+.alert.alert-default button.close span {
+    color: #777777;
+    opacity: 0.7;
+}
+.alert-primary {
+    background: #3f51b5;
+    color: #ffffff;
+}
+.notification_btns .btn {
+    margin-bottom: 15px;
+    margin-right: 15px;
+}
 /**
 登录注册部分结束
 */

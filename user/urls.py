@@ -17,4 +17,5 @@ class TemplateAutoView(TemplateView):
 
 urlpatterns = [
     url(r'^tp/(?P<template_name>\w+).html$',TemplateAutoView.as_view()),
+    url(r'^(index/|dashboard/)?$',DashboardView.as_view(),name='dashboard')
 ]

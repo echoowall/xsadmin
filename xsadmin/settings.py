@@ -21,6 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -30,6 +31,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crispy_forms',
     'home',
     'user',
 ]
@@ -110,5 +112,11 @@ STATICFILES_DIRS = [
 
 #自定义用户模型
 AUTH_USER_MODEL = 'user.User'
-
+AUTHENTICATION_BACKENDS = (
+    'home.authentication.EmailUsernameAuthBackend',
+)
 from .settings_custom import *
+
+CRISPY_TEMPLATE_PACK  =  'bootstrap3'
+LOGIN_REDIRECT_URL = '/user/'
+LOGIN_URL = '/login/'

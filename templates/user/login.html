@@ -4,44 +4,54 @@
 <div class="eternity-form container">
     <div class="login-form-section">
         <div class="login-content " data-animation="bounceIn">
-            <form>
+            <form method="post">
                 <div class="section-title">
                     <h3>登录你的帐号</h3>
+                </div>{% csrf_token %}
+                <div class="textbox-wrap">
+                    <div class="input-group">
+                        <span class="input-group-addon "><i class="fa fa-user"></i></span>
+                        {{ form.userfield }}
+                    </div>
+                    {% if form.userfield.errors %}<label class="label-warning val-error">{{ form.userfield.errors.0 }}</label>{% endif %}
                 </div>
                 <div class="textbox-wrap">
                     <div class="input-group">
-                        <span class="input-group-addon "><i class="icon-user icon-color"></i></span>
-                        <input type="text" required="required" class="form-control" placeholder="Username" />
+                        <span class="input-group-addon "><i class="fa fa-key"></i></span>
+                        {{ form.password }}
                     </div>
-                </div>
-                <div class="textbox-wrap">
-                    <div class="input-group">
-                        <span class="input-group-addon "><i class="icon-key icon-color"></i></span>
-                        <input type="password" required="required" class="form-control " placeholder="Password" />
-                    </div>
+                    {% if form.password.errors %}<label class="label-warning val-error">{{ form.password.errors.0 }}</label>{% endif %}
                 </div>
                 <div class="login-form-action clearfix">
                     <div class="checkbox pull-left">
                         <div class="custom-checkbox">
-                            <input type="checkbox" checked name="iCheck">
+                            {{ form.remember }}
                         </div>
                         <span class="checkbox-text pull-left">&nbsp;记住登录状态</span>
                     </div>
-                    <button type="submit" class="btn btn-success pull-right green-btn">登录 &nbsp; <i class="icon-chevron-right"></i></button>
+                    <button type="submit" class="btn btn-success pull-right green-btn"> 登录 <i class="fa fa-sign-in"></i></button>
                 </div>
+                {% if form.non_field_errors %}
+                <div class="login-form-action clearfix">
+                <div class="alert alert-error alert-dismissible fade in">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <strong>出错了：</strong> {{ form.non_field_errors.0 }}
+                </div>
+                </div>
+                {% endif %}
             </form>
         </div>
         <div class="login-form-links link1 " data-animation="fadeInLeftBig" data-animation-delay=".2s">
-            <h4 class="blue">Don't have an Account?</h4>
-            <span>No worry</span>
-            <a href="#demo2" class="blue">Click Here</a>
-            <span>to Register</span>
+            <h4 class="blue">还没有帐号？</h4>
+            <span>别急，</span>
+            <a href="#demo2" class="blue">点这里</a>
+            <span>去注册</span>
         </div>
         <div class="login-form-links link2 " data-animation="fadeInRightBig" data-animation-delay=".4s">
-            <h4 class="green">Forget your Password?</h4>
-            <span>Dont worry</span>
-            <a href="#demo3" class="green">Click Here</a>
-            <span>to Get New One</span>
+            <h4 class="green">忘记密码了？</h4>
+            <span>别担心，</span>
+            <a href="#demo3" class="green">点这里</a>
+            <span>找回密码</span>
         </div>
     </div>
 </div>

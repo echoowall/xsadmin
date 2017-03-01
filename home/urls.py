@@ -12,4 +12,6 @@ urlpatterns = [
     url(r'^(index/)?$', IndexView.as_view(),name='index'),
     url(r'^download/$', DownloadView.as_view(),name='download'),
     url(r'^about/$', AboutView.as_view(),name='about'),
+    url(r'^login/$', LoginView.as_view(),name='login'),
+    url(r'^logout/$',logout,name='logout')
 ]

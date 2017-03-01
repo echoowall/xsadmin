@@ -1,0 +1,266 @@
+{% extends './layout.html' %}
+{% block title %}仪表盘{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-6 col-xs-12">
+        <div class="row">
+            <div class="col-lg-12">
+                <section class="box ">
+                <header class="panel_header">
+                    <h2 class="title pull-left">流量配额</h2>
+                </header>
+                <div class="content-body">
+                    <div class="row">
+                    <div class="col-xs-12">
+                        <div class="chart-container">
+                          <div class="chart has-fixed-height" style="height:300px" id="trans_chart"></div>
+                      </div>
+                    </div>
+                    </div> <!-- End .row -->
+                </div>
+        </section>
+            </div>
+            <div class="col-lg-12">
+                <section class="box ">
+                <header class="panel_header">
+                    <h2 class="title pull-left">上传下载</h2>
+                </header>
+                <div class="content-body">
+                    <div class="row">
+                    <div class="col-xs-12">
+                        <div class="chart-container">
+                          <div class="chart has-fixed-height" style="height:300px" id="down-up-load-trans"></div>
+                      </div>
+                    </div>
+                    </div> <!-- End .row -->
+                </div>
+        </section>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-lg-6 col-xs-12">
+        <section class="box index-publish">
+            <header class="pannel_header">
+                <h2 class="title pull-left">站内公告</h2>
+            </header>
+            <div class="content-body">
+                <ul class="list-item">
+                    {% for i in '12345'|make_list %}
+                    <li>
+                        <div class="feed-element">
+                            <div class="feed-head"><a href="#/">线路节点调整公告</a></div>
+                            <div class="feed-content">
+                                <p>日本Linode 已经更新新的IP地址！新增 新加坡节点~ :)</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="feed-element">
+                            <div class="feed-head"><a href="#/">新增一条韩国线路</a></div>
+                            <div class="feed-content">
+                                <p>新增一条韩国线路。有需要的可以使用。韩国线路是Krpyt数据中心，线路优秀，电信直连，100M大水管带宽，流量充裕  :)</p>
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <button class="btn btn-info btn-block btn-2x">查看更多</button>
+        </section>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <section class="box ">
+        <header class="panel_header">
+            <h2 class="title pull-left">流量使用</h2>
+        </header>
+        <div class="content-body">
+            <div class="row">
+            <div class="col-xs-12">
+                <div class="chart-container">
+                  <div class="chart has-fixed-height" style="height:240px" id="trans_use_info"></div>
+              </div>
+            </div>
+            </div> <!-- End .row -->
+        </div>
+        </section>
+    </div>
+</div>
+<div class="row"></div>
+
+{% endblock %}
+{% block js %}
+    <script src="//cdn.bootcss.com/echarts/2.2.7/echarts-all.js"></script>
+    <script type="text/javascript">
+        if($("#trans_chart").length){
+
+// Initialize after dom ready
+        var myChart = echarts.init(document.getElementById('trans_chart'));
+        var downUpChart = echarts.init(document.getElementById('down-up-load-trans'));
+        var option = {
+
+                tooltip : {
+                    formatter: "{a} <br/>{b} : {c}%"
+                },
+                toolbox: {
+                    show : false,
+                    feature : {
+                        mark : {show: true},
+                        restore : {show: true},
+                        saveAsImage : {show: true}
+                    }
+                },
+                series : [
+                    {
+                        name:'流量使用',
+                        type:'gauge',
+                        center: ['50%', '50%'],
+                        radius: ['0%', '100%'],
+                        axisLine: {
+                            show: true,
+                            lineStyle: {
+                                color: [
+                                    [0.2, '#536DFE'],
+                                    [0.8, 'rgba(63,81,181,1)'],
+                                    [1, '#E91E63']
+                                ],
+                                width: 10
+                            }
+                        }  ,
+                        title: {
+                            show : true,
+
+                            textStyle: {
+                                color: '#333',
+                                fontSize : 15
+                            }
+                        }  ,
+                        detail: {
+                            show : true,
+                            backgroundColor: 'rgba(0,0,0,0)',
+                            borderWidth: 0,
+                            borderColor: '#ccc',
+                            width: 100,
+                            height: 40,
+                            offsetCenter: [0, '40%'],
+                            formatter:'{value}%',
+                            textStyle: {
+                                color: 'auto',
+                                fontSize : 20
+                            }
+                        },
+
+                        data:[{value: 50, name: '已使用 (MB)'}]
+                    }
+             ]
+};
+
+//myChart.setOption(option);
+gauge_load_chart(option);
+var timeTicket = setInterval(function (){
+    gauge_load_chart(option);
+},1500);
+
+function gauge_load_chart(option){
+    option.series[0].data[0].value = (Math.random()*100).toFixed(2) - 0;
+    myChart.setOption(option,true);
+}
+
+
+clearInterval(timeTicket);
+
+            downUpChart.setOption({
+                title:{
+                    text:'上传下载情况',
+                    subtext:'上传下载配比',
+                    x:'center'
+                },
+                tooltip : {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                },
+                legend: {
+                    orient : 'vertical',
+                    x : 'left',
+                    data:['上传','下载']
+                },
+
+                calculable : true,
+                series : [
+                    {
+                        name:'使用比例',
+                        type:'pie',
+                        radius : '55%',
+                        center: ['50%', '60%'],
+                        data:[
+                            {value:27, name:'上传'},
+                            {value:73, name:'下载'}
+                        ]
+                    }
+                ],
+                color:['rgb(233, 30, 99)','rgb(103, 58, 183)']
+            },true);
+
+            echarts.init(document.getElementById('trans_use_info')).setOption({
+                title : {
+        text: '流量使用记录',
+        subtext: '每日上传下载流量'
+    },
+    tooltip : {
+        trigger: 'axis'
+    },
+    legend: {
+        data:[
+            '上传','','下载'
+        ]
+    },
+    calculable : true,
+    grid: {y: 70, y2:30, x2:20},
+    xAxis : [
+        {
+            type : 'category',
+            data : ['2017/2/1','2017/2/2','2017/2/3','2017/2/4','2017/2/5','2017/2/6','2017/2/7','2017/2/8','2017/2/9','2017/2/10','2017/2/11',
+            '2017/2/1','2017/2/2','2017/2/3','2017/2/4','2017/2/5','2017/2/6','2017/2/7','2017/2/8','2017/2/9','2017/2/10','2017/2/11'
+            ,'2017/2/3','2017/2/4','2017/2/5','2017/2/6','2017/2/7','2017/2/8','2017/2/9','2017/2/10','2017/2/11']
+        },
+        {
+            type : 'category',
+            axisLine: {show:false},
+            axisTick: {show:false},
+            axisLabel: {show:false},
+            splitArea: {show:false},
+            splitLine: {show:false},
+            data : ['2017/2/1','2017/2/2','2017/2/3','2017/2/4','2017/2/5','2017/2/6','2017/2/7','2017/2/8','2017/2/9','2017/2/10','2017/2/11',
+            '2017/2/1','2017/2/2','2017/2/3','2017/2/4','2017/2/5','2017/2/6','2017/2/7','2017/2/8','2017/2/9','2017/2/10','2017/2/11'
+            ,'2017/2/3','2017/2/4','2017/2/5','2017/2/6','2017/2/7','2017/2/8','2017/2/9','2017/2/10','2017/2/11']
+        }
+    ],
+    yAxis : [
+        {
+            type : 'value',
+            axisLabel:{formatter:'{value} MB'}
+        }
+    ],
+    series : [
+        {
+            name:'上传',
+            type:'bar',
+            itemStyle: {normal: {color:'rgb(233, 30, 99)', label:{show:true}}},
+            data:[40,155,95,75, 0,21,31,12,34,12,52,28,40,155,95,75, 0,21,31,12,34,12,52,28,95,75, 0,21,31,12,34,12,52,28]
+        },
+        {
+            name:'下载',
+            type:'bar',
+            xAxisIndex:1,
+            itemStyle: {normal: {color:'rgb(103, 58, 183)', label:{show:true,textStyle:{color:'#27727B'}}}},
+            data:[100,200,105,100,156, 220,251,131,172,314,93,512,100,200,105,100,156, 220,251,131,172,314,93,512,200,105,100,156, 220,251,131,172,314,93,512]
+        }
+    ]
+            });
+
+
+}
+    </script>
+{% endblock %}
