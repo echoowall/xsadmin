@@ -1031,7 +1031,6 @@ section header .title {
     line-height: 30px;
     color: #676767;
     font-weight: 400;
-    text-transform: uppercase;
     display: inline-block;
 }
 section .content-body {

@@ -1,7 +1,7 @@
 <!-- START TOPBAR -->{% load static %}
 <div class='page-topbar '>
     <div class='logo-area'>
-        <img  class="logo-img" src="{% static 'images/logo.png' %}">
+        <a href="{% url 'home:index' %}"><img  class="logo-img" src="{% static 'images/logo.png' %}"></a>
         <span class="logo-title"><span>{{ SITE_NAME }}</span></span>
     </div>
     <div class='quick-area'>
@@ -295,8 +295,8 @@
             <ul class="info-menu right-links list-inline list-unstyled">
                 <li class="profile">
                     <a href="#" data-toggle="dropdown" class="toggle">
-                        <img src="{% static 'images/avatars/avatar1.png' %}" alt="user-image" class="img-circle img-inline">
-                        <span>John Doug <i class="fa fa-angle-down"></i></span>
+                        <img src="{% static 'images/avatars/' %}{{ user.avatar }}" alt="user-image" class="img-circle img-inline">
+                        <span>{{ user.get_full_name|default:user.username }} <i class="fa fa-angle-down"></i></span>
                     </a>
                     <ul class="dropdown-menu profile animated fadeIn">
                         <li>

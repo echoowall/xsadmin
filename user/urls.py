@@ -19,4 +19,7 @@ urlpatterns = [
     url(r'^tp/(?P<template_name>\w+).html$',TemplateAutoView.as_view()),
     url(r'^logout/$',logout,name='logout'),
     url(r'^(index/|dashboard/)?$',DashboardView.as_view(),name='dashboard'),
+    url(r'^profile/$',ProfileView.as_view(), name='profile'),
+    url(r'^passwd/$',PasswdView.as_view(), name='passwd'),
+    url(r'^password/$',PasswordView.as_view(), name='password'),
 ]

@@ -7,7 +7,6 @@ from django.db.models import Max
 from . import utils
 import random
 
-
 def get_usefull_port():
     max_port = User.objects.aggregate(Max('port'))['port__max']
     new_port = int(max_port) + random.randint(2,5)
@@ -16,7 +15,7 @@ def get_usefull_port():
 # 用户模型.
 class User(AbstractUser):
 
-    avatar = models.CharField(verbose_name='头像', max_length=63,default='avatars/avatar1.png')
+    avatar = models.CharField(verbose_name='头像', max_length=63,default='avatar1.png')
     port = models.PositiveSmallIntegerField(verbose_name='端口',unique=True, default= get_usefull_port)
     passwd = models.CharField(verbose_name='端口密码',max_length=16,default=utils.gen_passwd)
     t = models.IntegerField(verbose_name='最后使用时间戳',default=0)
@@ -49,6 +48,7 @@ class User(AbstractUser):
 
     def __unicode__(self):
         return self.username
+
 
 class Node(models.Model):
     METHOD_CHOICES = (

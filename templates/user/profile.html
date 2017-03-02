@@ -1,44 +1,15 @@
 {% extends './layout.html' %}
-{% block title %}个人信息{% endblock %}
+{% block title %}{{ page_title }}{% endblock %}
 {% block content %}
 <section class="box">
     <header class="panel_header">
-        <h2 class="title pull-left">我的基本信息</h2>
+        <h2 class="title pull-left">{{ page_title }}</h2>
     </header>
 <div class="content-body">
-    <div class="row">
-        <form action="#" method="post">
-        <div class="col-xs-12 col-sm-9 col-md-8">
-            <div class="form-group">
-                <label class="form-label" for="field-128542">用户名</label>
-                <span class="desc"></span>
-                <div class="controls">
-                    <input type="text" value="" class="form-control">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label" for="field-13295">邮箱</label>
-                <span class="desc"></span>
-                <div class="controls">
-                    <input type="text" value="" class="form-control">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Description</label>
-                <span class="desc"></span>
-                <div class="controls">
-                    <textarea class="form-control autogrow" cols="5" style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 54px;"></textarea>
-                </div>
-            </div>
+    <div class="row">{% load crispy_forms_tags %}
+        <div class="{{ form_wapper_class }}">
+            {% crispy form %}
         </div>
-        <div class="col-xs-12 col-sm-9 col-md-8 padding-bottom-30">
-                <div class="text-left">
-                <button type="button" class="btn btn-primary">保存</button>
-                <button type="button" class="btn">取消</button>
-            </div>
-        </div>
-        </form>
     </div>
 </div>
 </section>
