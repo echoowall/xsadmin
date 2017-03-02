@@ -4,66 +4,76 @@ from django.contrib.auth import login,logout as auth_logout
 from django.contrib.auth.views import _get_login_redirect_url
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
+from .forms import *
+from django.conf import settings
+import datetime
+from . import utils
 
 # Create your views here.
-class BaseHomeView(TemplateView):
-    def get_context_data(self, **kwargs):
-        context = super(BaseHomeView, self).get_context_data(**kwargs)
-        #context['']
-        return context
 
-class IndexView(BaseHomeView):
+class IndexView(TemplateView):
     template_name = 'home/index.html'
 
-class DownloadView(BaseHomeView):
+class DownloadView(TemplateView):
     template_name = 'home/download.html'
 
-class AboutView(BaseHomeView):
-    template_name = 'user/forgot_password.html'
-
-from .forms import *
+class AboutView(TemplateView):
+    template_name = 'user/../templates/home/forgot_password.html'
 
 REDIRECT_FIELD_NAME = 'next'
 
-class LoginView(BaseHomeView):
-
-    redirect_authenticated_user = True
-    template_name = 'user/login.html'
-
-    def get_redirect_to(self,request):
-        redirect_to = self.request.POST.get(REDIRECT_FIELD_NAME, self.request.GET.get(REDIRECT_FIELD_NAME, ''))
-        return redirect_to
+class BaseAuthedRedirectFormView(FormView):
 
     def dispatch(self, request, *args, **kwargs):
-        if self.redirect_authenticated_user and request.user.is_authenticated:
-            redirect_to = _get_login_redirect_url(request, self.get_redirect_to(request))
+        if request.user.is_authenticated:
+            redirect_to = self.get_success_url()
             if redirect_to == request.path:
-                raise ValueError(
-                    "Redirection loop for authenticated user detected. Check that "
-                    "your LOGIN_REDIRECT_URL doesn't point to a login page."
-                )
+                raise ValueError('LOGIN_REDIRECT_URL配置错误，不能指向login的URL，否则会无限重定向')
             return HttpResponseRedirect(redirect_to)
-        return super(LoginView,self).dispatch(request, args, kwargs)
+        return super(BaseAuthedRedirectFormView,self).dispatch(request, args, kwargs)
 
-    def get_context_data(self, **kwargs):
-        context = super(LoginView, self).get_context_data(**kwargs)
-        if self.request.method == 'POST':
-            form = LoginForm(self.request.POST)
-        else:
-            form = LoginForm()
-        context['form'] = form
-        return context
+class LoginView(BaseAuthedRedirectFormView):
 
-    def post(self, request, *args, **kwargs):
-        context = self.get_context_data(**kwargs)
-        form = context['form']
-        if form.is_valid():
-            login(request, form.user_cache)
-            redirect_to = _get_login_redirect_url(request,self.get_redirect_to(request))
-            return HttpResponseRedirect(redirect_to)
-        print(form.errors)
-        return self.render_to_response(context)
+    template_name = 'home/login.html'
+    form_class = LoginForm
 
-def logout(request):
-    auth_logout(request)
-    return redirect('home:login')
+    def get_success_url(self):
+        request = self.request
+        redirect_to = request.POST.get(REDIRECT_FIELD_NAME, request.GET.get(REDIRECT_FIELD_NAME, ''))
+        redirect_to = _get_login_redirect_url(request,redirect_to)
+        return redirect_to
+
+    def form_valid(self, form):
+        login(self.request, form.user_cache)
+        return super(LoginView,self).form_valid(form)
+
+
+class RegisterView(BaseAuthedRedirectFormView):
+
+    form_class = RegisterForm
+    template_name = 'home/register.html'
+
+    def get_success_url(self):
+        return settings.LOGIN_REDIRECT_URL
+
+    def form_valid(self, form):
+        #验证无误，注册用户，废除邀请码
+        code = InviteCode.objects.get(code__exact=form.cleaned_data.get('invite_code'))
+        ip = utils.get_remote_ip(self.request)
+        now = datetime.datetime.now()
+        extra_fields = {
+            'transfer_enable': code.traffic,
+            'reg_ip': ip,
+            'last_login_ip': ip,
+            'this_login_ip': ip,
+        }
+        user = User.objects.create_user(username= form.cleaned_data['username'],
+                email= form.cleaned_data['email'],password= form.cleaned_data['password'], **extra_fields)
+
+        code.enable = False
+        code.used_user = user
+        code.used_time = now
+        code.save()
+        login(request=self.request,user=user)
+        return super(RegisterView,self).form_valid(form)
+

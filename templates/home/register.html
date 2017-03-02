@@ -1,0 +1,84 @@
+{% extends 'home/layout.html' %}
+{% block title %}用户注册{% endblock %}
+{% block content %}
+<!-- #region Registration Form -->
+<div class="eternity-form container">
+    <div class="registration-form-section">
+        <form method="post">
+            <div class="section-title reg-header">
+                <h3>注册新账户</h3>
+            </div>{% csrf_token %}
+            <div class="clearfix">
+                <div class="col-sm-6 registration-left-section">
+                    <div class="reg-content">
+                        <div class="textbox-wrap">
+                            <div class="input-group">
+                                <span class="input-group-addon "><i class="fa fa-user"></i></span>
+                                {{ form.username }}
+                            </div>
+                            {% if form.username.errors %}<label class="label-warning val-error">{{ form.username.errors.0 }}</label>{% endif %}
+                        </div>
+                        <div class="textbox-wrap">
+                            <div class="input-group">
+                                <span class="input-group-addon "><i class="fa fa-key"></i></span>
+                                {{ form.password }}
+                            </div>
+                            {% if form.password.errors %}<label class="label-warning val-error">{{ form.password.errors.0 }}</label>{% endif %}
+                        </div>
+                        <div class="textbox-wrap">
+                            <div class="input-group">
+                                <span class="input-group-addon "><i class="fa fa-key"></i></span>
+                                {{ form.password2 }}
+                            </div>
+                            {% if form.password2.errors %}<label class="label-warning val-error">{{ form.password2.errors.0 }}</label>{% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 registration-right-section">
+                    <div class="reg-content">
+                        <div class="textbox-wrap">
+                            <div class="input-group">
+                                <span class="input-group-addon "><i class="fa fa-envelope-o"></i></span>
+                                {{ form.email }}
+                            </div>
+                            {% if form.email.errors %}<label class="label-warning val-error">{{ form.email.errors.0 }}</label>{% endif %}
+                        </div>
+                        <div class="textbox-wrap">
+                            <div class="input-group">
+                                <span class="input-group-addon "><i class="fa fa-plane"></i></span>
+                                {{ form.invite_code }}
+                            </div>
+                            {% if form.invite_code.errors %}<label class="label-warning val-error">{{ form.invite_code.errors.0 }}</label>{% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="registration-form-action clearfix">
+                <a href="{% url 'home:login' %}" class="btn btn-success pull-left blue-btn ">
+                    <i class="fa fa-chevron-left"></i>&nbsp; &nbsp;返回登录
+                </a>
+                <button type="submit" class="btn btn-success pull-right green-btn ">立即注册 &nbsp; <i class="fa fa-chevron-right"></i></button>
+
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+    <script src="//cdn.bootcss.com/jquery-placeholder/2.3.1/jquery.placeholder.min.js"></script>
+    <script src="//cdn.bootcss.com/iCheck/1.0.2/icheck.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("input").iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                increaseArea: '20%' // optional
+            });
+
+            $(".form-control").focus(function () {
+                $(this).closest(".textbox-wrap").addClass("focused");
+            }).blur(function () {
+                $(this).closest(".textbox-wrap").removeClass("focused");
+            });
+        });
+    </script>
+{% endblock %}

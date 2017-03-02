@@ -3,11 +3,21 @@ from django.db import models
 
 # Create your models here.
 from django.contrib.auth.models import AbstractUser
+from django.db.models import Max
 from . import utils
+import random
+
+
+def get_usefull_port():
+    max_port = User.objects.aggregate(Max('port'))['port__max']
+    new_port = int(max_port) + random.randint(2,5)
+    return new_port
+
 # 用户模型.
 class User(AbstractUser):
-    avatar = models.CharField(verbose_name='头像', max_length=63,default='avatar/default.png')
-    port = models.PositiveSmallIntegerField(verbose_name='端口',unique=True)
+
+    avatar = models.CharField(verbose_name='头像', max_length=63,default='avatars/avatar1.png')
+    port = models.PositiveSmallIntegerField(verbose_name='端口',unique=True, default= get_usefull_port)
     passwd = models.CharField(verbose_name='端口密码',max_length=16,default=utils.gen_passwd)
     t = models.IntegerField(verbose_name='最后使用时间戳',default=0)
     u = models.BigIntegerField(verbose_name='上传流量',default=0)
@@ -17,12 +27,11 @@ class User(AbstractUser):
     last_check_in_time = models.DateTimeField(verbose_name='最后签到时间',null=True)
     check_in_count = models.IntegerField(verbose_name='连续签到次数',default=0)
 
-    reg_date = models.DateTimeField(auto_now_add=True,verbose_name='注册时间')
     reg_ip = models.GenericIPAddressField(verbose_name='注册IP',unpack_ipv4=True,null=True)
     last_login_ip = models.GenericIPAddressField(verbose_name='上次登录IP',unpack_ipv4=True,null=True)
-    last_login_date = models.DateTimeField(verbose_name='上次登录时间',null=True)
+    last_login_date = models.DateTimeField(verbose_name='上次登录时间',null=True,auto_now_add=True)
     this_login_ip = models.GenericIPAddressField(verbose_name='本次登录IP',unpack_ipv4=True,null=True)
-    this_login_date = models.DateTimeField(verbose_name='本次登录时间',null=True)
+    this_login_date = models.DateTimeField(verbose_name='本次登录时间',null=True,auto_now_add=True)
 
     invite_num = models.IntegerField(verbose_name='可以生成邀请码的个数',default=0)
     last_gen_invite_code_time = models.DateTimeField(verbose_name='上次生成邀请码时间',null=True)
@@ -110,7 +119,7 @@ class Node(models.Model):
 
 class InviteCode(models.Model):
 
-    code = models.CharField(max_length=127,verbose_name='邀请码',default=utils.gen_invite_code)
+    code = models.CharField(max_length=127,verbose_name='邀请码',default=utils.gen_invite_code,unique=True)
     create_time = models.DateTimeField(auto_now_add=True,verbose_name='创建时间')
     used_time = models.DateTimeField(null=True,verbose_name='使用时间')
     TYPE_DEFAULT = 'DEFAULT'
