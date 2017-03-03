@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import *
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth import logout as auth_logout
+from django.contrib.auth import logout as auth_logout,update_session_auth_hash
 from django.shortcuts import redirect
 from .models import *
 from .forms import *
@@ -72,6 +72,15 @@ class PasswordView(LoginRequiredMixin, UpdateView):
         update_session_auth_hash(request=self.request, user=form.instance)
         return response
 
+class NodeListView(LoginRequiredMixin, ListView):
+
+    template_name = 'user/nodes.html'
+    model = Node
+    context_object_name = 'nodeLists'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset
 
 
 

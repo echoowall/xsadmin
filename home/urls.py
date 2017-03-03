@@ -14,5 +14,5 @@ urlpatterns = [
     url(r'^about/$', AboutView.as_view(),name='about'),
     url(r'^login/$', LoginView.as_view(),name='login'),
     url(r'^register/$',RegisterView.as_view(),name='register'),
-
+    url(r'^get_gee_captcha/$', GeeCaptchaView.as_view(), name='get_gee_captcha'),
 ]

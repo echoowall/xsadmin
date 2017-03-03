@@ -8,6 +8,8 @@ from .forms import *
 from django.conf import settings
 import datetime
 from . import utils
+from django.http import HttpResponse,HttpResponseForbidden
+from geetest import GeetestLib
 
 # Create your views here.
 
@@ -32,6 +34,22 @@ class BaseAuthedRedirectFormView(FormView):
             return HttpResponseRedirect(redirect_to)
         return super(BaseAuthedRedirectFormView,self).dispatch(request, args, kwargs)
 
+    def post(self, request, *args, **kwargs):
+        gt = GeetestLib(settings.GEE_CAPTCHA_ID, settings.GEE_PRIVATE_KEY)
+        challenge = request.POST.get(gt.FN_CHALLENGE, '')
+        validate = request.POST.get(gt.FN_VALIDATE, '')
+        seccode = request.POST.get(gt.FN_SECCODE, '')
+        status = request.session.get(gt.GT_STATUS_SESSION_KEY)
+        user_id = request.session.get("gee_user_id")
+        if status:
+            result = gt.success_validate(challenge, validate, seccode, user_id)
+        else:
+            result = gt.failback_validate(challenge, validate, seccode)
+        if not result:
+            return HttpResponseForbidden('请正确滑动解锁')
+        return super().post(request, *args, **kwargs)
+
+
 class LoginView(BaseAuthedRedirectFormView):
 
     template_name = 'home/login.html'
@@ -52,6 +70,11 @@ class RegisterView(BaseAuthedRedirectFormView):
 
     form_class = RegisterForm
     template_name = 'home/register.html'
+
+    def get_initial(self):
+        inital = super().get_initial()
+        inital['invite_code'] = self.request.GET.get('invite_code','')
+        return inital
 
     def get_success_url(self):
         return settings.LOGIN_REDIRECT_URL
@@ -76,4 +99,19 @@ class RegisterView(BaseAuthedRedirectFormView):
         code.save()
         login(request=self.request,user=user)
         return super(RegisterView,self).form_valid(form)
+
+
+class GeeCaptchaView(View):
+
+    def post(self, request, *args, **kwargs):
+        gee_user_id = request.session.get('gee_user_id')
+        if gee_user_id is None:
+            gee_user_id = request.POST.get('csrfmiddlewaretoken','testtesttest')[2:10]
+            request.session["gee_user_id"] = gee_user_id
+        gt = GeetestLib(settings.GEE_CAPTCHA_ID, settings.GEE_PRIVATE_KEY)
+        status = gt.pre_process(gee_user_id)
+        request.session[gt.GT_STATUS_SESSION_KEY] = status
+
+        response_str = gt.get_response_str()
+        return HttpResponse(response_str, content_type='application/json')
 

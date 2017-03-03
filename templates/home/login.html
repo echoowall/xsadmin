@@ -22,6 +22,11 @@
                     </div>
                     {% if form.password.errors %}<label class="label-warning val-error">{{ form.password.errors.0 }}</label>{% endif %}
                 </div>
+                <div style="margin: 12px 0px 10px 32px">
+                   <div id="embed-captcha"></div>
+                    <p id="wait" class="show">正在加载验证码......</p>
+                    <p id="notice" class="hide">请先拖动验证码到相应位置</p>
+                </div>
                 <div class="login-form-action clearfix">
                     <div class="checkbox pull-left">
                         <div class="custom-checkbox">
@@ -29,7 +34,7 @@
                         </div>
                         <span class="checkbox-text pull-left">&nbsp;记住登录状态</span>
                     </div>
-                    <button type="submit" class="btn btn-success pull-right green-btn"> 登录 <i class="fa fa-sign-in"></i></button>
+                    <button type="submit" id="embed-submit" class="btn btn-success pull-right green-btn"> 登录 <i class="fa fa-sign-in"></i></button>
                 </div>
                 {% if form.non_field_errors %}
                 <div class="login-form-action clearfix">
@@ -59,7 +64,35 @@
 {% block js %}
     <script src="//cdn.bootcss.com/jquery-placeholder/2.3.1/jquery.placeholder.min.js"></script>
     <script src="//cdn.bootcss.com/iCheck/1.0.2/icheck.min.js"></script>
+    <script src="//static.geetest.com/static/tools/gt.js"></script>
     <script type="text/javascript">
+        var handlerEmbed = function (captchaObj) {
+            $("#embed-submit").click(function (e) {
+                var validate = captchaObj.getValidate();
+                if (!validate) {
+                    $("#notice")[0].className = "show";
+                    setTimeout(function () {
+                        $("#notice")[0].className = "hide";
+                    }, 2000);
+                    e.preventDefault();
+                }
+            });
+            // 将验证码加到id为captcha的元素里
+            captchaObj.appendTo("#embed-captcha");
+            captchaObj.onReady(function () {
+                $("#wait")[0].className = "hide";
+            });
+        };
+        $.post('{% url 'home:get_gee_captcha' %}?t='+ (new Date()).getTime(),
+            {'csrfmiddlewaretoken':'{{ csrf_token }}'},
+            function(data){
+                initGeetest({
+                gt: data.gt,
+                challenge: data.challenge,
+                product: "float", // 产品形式，包括：float，embed，popup。注意只对PC版验证码有效
+                offline: !data.success // 表示用户后台检测极验服务器是否宕机，一般不需要关注
+            }, handlerEmbed);
+        });
         $(function () {
             $("input").iCheck({
                 checkboxClass: 'icheckbox_square-blue',

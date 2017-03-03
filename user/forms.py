@@ -9,8 +9,7 @@ from django.forms import Form,ModelForm,fields,widgets,ValidationError
 from .models import *
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, HTML
-from django.contrib.auth import update_session_auth_hash
-
+from .widgets import AvatarRadioSelect
 
 class ProfileForm(ModelForm):
 
@@ -18,6 +17,15 @@ class ProfileForm(ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper(self)
         self.helper.add_input(Submit('submit','确定修改'))
+
+    avatar = fields.CharField(label='我是头像',widget=AvatarRadioSelect())
+
+    def clean_avatar(self):
+        avatar = self.cleaned_data['avatar']
+        if avatar not in AvatarRadioSelect.avatars():
+            raise ValidationError('请按照要求选择头像')
+        else:
+            return avatar
 
     class Meta:
         model = User

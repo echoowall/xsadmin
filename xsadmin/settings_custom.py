@@ -30,3 +30,7 @@ SITE_CONFIG = {
     'SITE_NAME':'XS Admin',
     'SITE_DESC':'One powerful tool...',
 }
+
+#极验证
+GEE_CAPTCHA_ID = 'b46d1900d0a894591916ea94ea91bd2c'
+GEE_PRIVATE_KEY = '36fc3fe98530eea08dfc6ce76e3d24c4'

@@ -71,13 +71,13 @@ class Node(models.Model):
         ('MAINTAIN','维护中'),
         ('OUT','下线'),
     )
-
+    id = models.CharField(max_length=63, verbose_name='主键、API Key', primary_key=True, default=utils.gen_api_key, editable=False)
     name = models.CharField(max_length=63,verbose_name='节点名称')
     ip = models.GenericIPAddressField(verbose_name='节点IP地址',protocol='IPv4')
-    ipv6 = models.GenericIPAddressField(null=True,protocol='IPv6',verbose_name='节点IPv6地址')
-    method = models.CharField(choices=METHOD_CHOICES,max_length=31,default='chacha20',verbose_name='节点加密方式')
-    info = models.TextField(max_length=255,verbose_name='节点信息')
-    status = models.CharField(max_length=10,choices=STATUS_CHOICES,default='INIT',verbose_name='节点状态')
+    ipv6 = models.GenericIPAddressField(blank=True, null= True , protocol='IPv6', verbose_name='节点IPv6地址')
+    method = models.CharField(choices=METHOD_CHOICES,max_length=63, default='chacha20', verbose_name='节点加密方式')
+    info = models.TextField(max_length=255, verbose_name='节点信息')
+    status = models.CharField(max_length=63, choices=STATUS_CHOICES,default='INIT',verbose_name='节点状态')
     traffic_rate = models.DecimalField(verbose_name='流量倍率',max_digits=8,decimal_places=2,default=1.00)
     sort = models.SmallIntegerField(verbose_name='排序',default=0,help_text='小的在前面')
 
@@ -106,7 +106,7 @@ class Node(models.Model):
 
     ssh_port = models.PositiveSmallIntegerField(verbose_name='SSH端口号',default=22)
 
-    api_key = models.CharField(verbose_name='API Key',unique=True,max_length=127,default=utils.gen_api_key, editable=False)
+    #api_key = models.CharField(verbose_name='API Key',unique=True,max_length=127,default=utils.gen_api_key, editable=False)
     api_secret = models.CharField(max_length=255,verbose_name='API Secret 密匙',default=utils.gen_api_secret)
 
     class Meta:
