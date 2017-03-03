@@ -10,9 +10,11 @@ from django.core.urlresolvers import reverse,reverse_lazy
 
 # Create your views here.
 
-def logout(request):
-    auth_logout(request)
-    return redirect('home:login')
+class LogoutView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        auth_logout(request)
+        return redirect('home:login')
+
 
 class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'user/dashboard.html'

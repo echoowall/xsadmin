@@ -23,7 +23,7 @@ class LoginForm(forms.Form):
         widget= widgets.PasswordInput(attrs={'class': 'form-control','placeholder': '登录密码'}))
     userfield = fields.CharField(required=True,max_length=64,
         widget= widgets.TextInput(attrs={'class': 'form-control','placeholder': '用户名/邮箱'}))
-    remember = fields.BooleanField(required=False)
+    remember = fields.BooleanField(required=False, initial= {'default': True })
 
     def clean_userfield(self):
         userfield = self.cleaned_data.get('userfield')

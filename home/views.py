@@ -10,6 +10,8 @@ import datetime
 from . import utils
 from django.http import HttpResponse,HttpResponseForbidden
 from geetest import GeetestLib
+from django.core.exceptions import PermissionDenied
+from user import utils as UserUtils
 
 # Create your views here.
 
@@ -20,11 +22,11 @@ class DownloadView(TemplateView):
     template_name = 'home/download.html'
 
 class AboutView(TemplateView):
-    template_name = 'user/../templates/home/forgot_password.html'
+    template_name = 'home/about.html'
 
 REDIRECT_FIELD_NAME = 'next'
 
-class BaseAuthedRedirectFormView(FormView):
+class AuthedRedirectMixin(object):
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
@@ -32,7 +34,10 @@ class BaseAuthedRedirectFormView(FormView):
             if redirect_to == request.path:
                 raise ValueError('LOGIN_REDIRECT_URL配置错误，不能指向login的URL，否则会无限重定向')
             return HttpResponseRedirect(redirect_to)
-        return super(BaseAuthedRedirectFormView,self).dispatch(request, args, kwargs)
+        return super().dispatch(request, *args, **kwargs)
+
+
+class GeeCaptchaValidateMixin(object):
 
     def post(self, request, *args, **kwargs):
         gt = GeetestLib(settings.GEE_CAPTCHA_ID, settings.GEE_PRIVATE_KEY)
@@ -46,11 +51,12 @@ class BaseAuthedRedirectFormView(FormView):
         else:
             result = gt.failback_validate(challenge, validate, seccode)
         if not result:
-            return HttpResponseForbidden('请正确滑动解锁')
+            raise PermissionDenied('请正确滑动解锁')
         return super().post(request, *args, **kwargs)
 
 
-class LoginView(BaseAuthedRedirectFormView):
+
+class LoginView(AuthedRedirectMixin, GeeCaptchaValidateMixin, FormView):
 
     template_name = 'home/login.html'
     form_class = LoginForm
@@ -63,10 +69,12 @@ class LoginView(BaseAuthedRedirectFormView):
 
     def form_valid(self, form):
         login(self.request, form.user_cache)
+        if not form.cleaned_data.get('remember'):
+            self.request.session.set_expiry(0)
         return super(LoginView,self).form_valid(form)
 
 
-class RegisterView(BaseAuthedRedirectFormView):
+class RegisterView(AuthedRedirectMixin, GeeCaptchaValidateMixin, FormView):
 
     form_class = RegisterForm
     template_name = 'home/register.html'
@@ -106,7 +114,7 @@ class GeeCaptchaView(View):
     def post(self, request, *args, **kwargs):
         gee_user_id = request.session.get('gee_user_id')
         if gee_user_id is None:
-            gee_user_id = request.POST.get('csrfmiddlewaretoken','testtesttest')[2:10]
+            gee_user_id = UserUtils.gen_api_key()
             request.session["gee_user_id"] = gee_user_id
         gt = GeetestLib(settings.GEE_CAPTCHA_ID, settings.GEE_PRIVATE_KEY)
         status = gt.pre_process(gee_user_id)
