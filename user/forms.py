@@ -30,6 +30,10 @@ class ProfileForm(ModelForm):
     class Meta:
         model = User
         fields = ('first_name','last_name','avatar')
+        widgets = {
+            'first_name': widgets.TextInput(attrs={'style':'width:200px'}),
+            'last_name': widgets.TextInput(attrs={'style':'width:200px'}),
+        }
 
 class PasswdForm(ModelForm):
 

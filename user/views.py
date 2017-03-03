@@ -26,7 +26,7 @@ class ProfileView(LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form_wapper_class'] = 'col-xs-6 col-sm-5 col-md-4'
+        context['form_wapper_class'] = 'col-md-12'
         context['page_title'] = '我的基本信息'
         return context
 
