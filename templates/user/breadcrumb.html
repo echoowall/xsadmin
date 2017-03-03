@@ -1,19 +1,17 @@
 <div class='col-xs-12'>
     <div class="page-title">
         <div class="pull-left"><!-- PAGE HEADING TAG - START -->
-            <h1 class="title">节点中心</h1><!-- PAGE HEADING TAG - END -->
+            <h1 class="title">{{ USER_BREADCRUMBS_TITLE|default:'无标题' }}</h1><!-- PAGE HEADING TAG - END -->
         </div>
         <div class="pull-right hidden-xs">
             <ol class="breadcrumb">
-                <li>
-                    <a href="dashboard.html"><i class="fa fa-home"></i>仪表盘</a>
-                </li>
-                <li>
-                    <a href="frl-buyers.html">节点中心</a>
-                </li>
-                <li class="active">
-                    <strong>节点列表</strong>
-                </li>
+                {% for bread in USER_BREADCRUMBS %}
+                    <li>
+                        <a href="{{ bread.url|default:'javascript:void(0)' }}">
+                            {% if forloop.first %}<i class="fa fa-{{ bread.icon }}"></i>{% endif %} {{ bread.title }}
+                        </a>
+                    </li>
+                {% endfor %}
             </ol>
         </div>
     </div>

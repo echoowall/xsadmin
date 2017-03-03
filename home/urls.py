@@ -8,6 +8,8 @@
 from django.conf.urls import url
 from .views import *
 
+app_name = 'home'
+
 urlpatterns = [
     url(r'^(index/)?$', IndexView.as_view(),name='index'),
     url(r'^download/$', DownloadView.as_view(),name='download'),

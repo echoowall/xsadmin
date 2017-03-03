@@ -15,6 +15,7 @@ class TemplateAutoView(TemplateView):
     def get_template_names(self):
         return 'user/'+self.kwargs['template_name']+'.html'
 
+app_name = 'user'
 
 urlpatterns = [
     url(r'^tp/(?P<template_name>\w+).html$', TemplateAutoView.as_view()),
@@ -27,11 +28,11 @@ urlpatterns = [
 ]
 
 menus = (
-    {'title': '仪表盘', 'icon': 'dashboard', 'url': reverse_lazy('user:dashboard'), 'children': ()},
-    {'title': '用户中心', 'icon': 'user', 'url': '', 'children': (
-        {'title': '我的信息', 'icon': 'users', 'url': reverse_lazy('user:profile')},
-        {'title': '安全设置', 'icon': 'user-secret', 'url': reverse_lazy('user:password')},
-        {'title': '连接设置', 'icon': 'connectdevelop', 'url': reverse_lazy('user:passwd')},
+    {'title': '仪表盘', 'title_en': 'Dashboard', 'icon': 'dashboard', 'url': reverse_lazy('user:dashboard'), 'children': ()},
+    {'title': '用户中心', 'title_en': 'User Center','icon': 'user', 'url': '', 'children': (
+        {'title': '我的信息', 'title_en': 'My Profile', 'icon': 'users', 'url': reverse_lazy('user:profile')},
+        {'title': '安全设置', 'title_en': 'Safe Setting', 'icon': 'user-secret', 'url': reverse_lazy('user:password')},
+        {'title': '连接设置', 'title_en': 'Connection Setting', 'icon': 'connectdevelop', 'url': reverse_lazy('user:passwd')},
     )},
-    {'title': '节点中心', 'icon': 'codepen', 'url': reverse_lazy('user:nodes'), 'children': ()},
+    {'title': '节点中心', 'title_en': 'Node Center', 'icon': 'codepen', 'url': reverse_lazy('user:nodes'), 'children': ()},
 )
