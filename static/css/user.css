@@ -745,11 +745,11 @@ a:hover, a:focus {
 #main-menu-wrapper li .sub-menu a {
     color: rgba(174, 178, 183, 1.0);
     margin-bottom: 1px;
-    padding-left: 55px;
+    padding-left: 15px;
     border-left: 4px solid transparent;
 }
 #main-menu-wrapper li.open .sub-menu a.active, #main-menu-wrapper li.open .sub-menu a:hover, #main-menu-wrapper li .sub-menu a:hover {
-    background-color: rgba(33, 33, 33, 0.1);
+    background-color: rgba(148, 148, 148, 0.1);
     border-left: 4px solid #3F51B5;
 }
 
@@ -801,6 +801,7 @@ a:hover, a:focus {
 #main-menu-wrapper li.open a .arrow.open:before {
     content: "\f107";
 }
+
 #main-menu-wrapper li a .arrow {
     float: right;
     position: absolute;

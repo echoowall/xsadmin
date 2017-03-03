@@ -9,6 +9,7 @@
 from django.conf.urls import url
 from .views import *
 from django.views.generic import TemplateView
+from django.urls import reverse_lazy
 
 class TemplateAutoView(TemplateView):
     def get_template_names(self):
@@ -24,3 +25,13 @@ urlpatterns = [
     url(r'^password/$', PasswordView.as_view(), name='password'),
     url(r'^nodes/$', NodeListView.as_view(), name='nodes')
 ]
+
+menus = (
+    {'title': '仪表盘', 'icon': 'dashboard', 'url': reverse_lazy('user:dashboard'), 'children': ()},
+    {'title': '用户中心', 'icon': 'user', 'url': '', 'children': (
+        {'title': '我的信息', 'icon': 'users', 'url': reverse_lazy('user:profile')},
+        {'title': '安全设置', 'icon': 'user-secret', 'url': reverse_lazy('user:password')},
+        {'title': '连接设置', 'icon': 'connectdevelop', 'url': reverse_lazy('user:passwd')},
+    )},
+    {'title': '节点中心', 'icon': 'codepen', 'url': reverse_lazy('user:nodes'), 'children': ()},
+)
