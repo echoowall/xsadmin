@@ -1,0 +1,27 @@
+<div id="qrcode" style="text-align: center;width:54%;display: inline-block;"></div>
+<div style="width: 44%;display: inline-block;">
+<p>服务器IP：<code>{{ node.ip }}</code>
+<p>服务器端口：<code>{{ user.port }}</code>
+<p>密码：<code>{{ user.passwd }}</code>
+<p>加密方式：<code>{{ node.method }}</code>
+<p>备注：<code>{{ node.name }}</code>
+</div>
+<br>
+<a class="collapsed" data-toggle="collapse" href="#collapse-node-more-info" aria-expanded="false" aria-controls="collapse-node-more-info">
+  <i class="fa fa-chevron-circle-up"></i> 更多信息
+</a>
+<style type="text/css">
+	.collapsed>.fa-chevron-circle-up:BEFORE{
+		content: "\f13a";
+	}
+</style>
+<div style="margin-top: 6px" class="collapse" id="collapse-node-more-info">
+  <p>连接字符串：<code>{{ node.ss_url }}</code></p>
+  <p>Base64加密：<code>{{ node.ss_qrcode }}</code></p>
+  <p>配置文件：<code>{"server":"{{ node.ip }}", "server_port":{{ node.port }}, "local_port":1080, "password":"{{ node.passwd }}", "timeout":600, "method":"{{ node.method }}","remarks":"{{ node.name }}"}</code></p>
+</div>
+<script>
+	jQuery(function(){
+		jQuery('#qrcode').qrcode("{{ node.ss_qrcode }}");
+	})
+</script>

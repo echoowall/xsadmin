@@ -30,7 +30,7 @@
                         </div><!-- ad-meta -->
                     </div><!-- ad-info -->
                     <div class="button">
-                        <a href="javascript:void(0)"><i class="fa fa-qrcode icon-xs icon-accent animated bounceIn"></i> 节点二维码</a>　
+                        <a href="javascript:showQrCode('{{ node.pk }}')"><i class="fa fa-qrcode icon-xs icon-accent animated bounceIn"></i> 节点连接信息</a>　
                         <a href="javascript:void(0)"><i class="fa fa-cloud icon-xs icon-success animated rotateIn"></i> 详细信息</a>
                     </div>
                 </div><!-- item-info -->
@@ -42,4 +42,41 @@
     </div>
 </div>
 </section>
+<!-- modal start -->
+<div class="modal fade col-xs-12" id="cmpltadminModal-qrcode" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">节点连接信息</h4>
+            </div>
+            <div class="modal-body">
+                <div class="loader">
+                    <div class="ball-pulse-sync">
+                        <div></div>
+                        <div></div>
+                        <div></div></div>
+                    <p>加载中，客观请稍等...</p>
+                </div>
+                <div class="row" id="qrcode-ajax-content">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block js %}
+    <script src="//cdn.bootcss.com/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+    <script type="text/javascript">
+        function showQrCode(pk) {
+            $('#cmpltadminModal-qrcode .loader').show();
+            $("#qrcode-ajax-content").html('');
+            $('#cmpltadminModal-qrcode').modal('show',{backdrop:"static"});
+            $.post('{% url "user:node_qr_info" %}',{'csrfmiddlewaretoken':'{{ csrf_token }}','pk':pk},function(data){
+                $('#cmpltadminModal-qrcode .loader').hide();
+                $("#qrcode-ajax-content").html(data);
+            },'html');
+        }
+    </script>
 {% endblock %}

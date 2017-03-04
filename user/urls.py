@@ -24,7 +24,8 @@ urlpatterns = [
     url(r'^profile/$', ProfileView.as_view(), name='profile'),
     url(r'^passwd/$', PasswdView.as_view(), name='passwd'),
     url(r'^password/$', PasswordView.as_view(), name='password'),
-    url(r'^nodes/$', NodeListView.as_view(), name='nodes')
+    url(r'^nodes/$', NodeListView.as_view(), name='nodes'),
+    url(r'^node_qr_info/$', NodeQrInfoView.as_view(), name= 'node_qr_info')
 ]
 
 menus = (

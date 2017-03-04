@@ -39,4 +39,4 @@ def get_menus_breadcrumbs(request ):
                     menu_sub['active'] = 'active'
                     return temp_menus, (menu, menu_sub, menu_sub_sub)
     else:
-        return temp_menus, (temp_menus[0])
+        return temp_menus, (temp_menus[0],)

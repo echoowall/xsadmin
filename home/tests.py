@@ -6,20 +6,23 @@ from django.test import TestCase
 class AMixin():
     def say(self):
         print('AMixin')
+        super().say()
 
 class B():
     def say(self):
         print('BMixin')
+        super().say()
 
 class CMixin():
     def say(self):
         print('CMixin')
+        #super().say()
 
 class User(AMixin,B,CMixin):
-    pass
-    # def say(self):
-    #     print('User')
-    #     super(AMixin,self).say()
+
+    def say(self):
+        print('User')
+        super().say()
 
 
 u = User()

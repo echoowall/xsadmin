@@ -186,6 +186,7 @@ a {
 }
 a:hover, a:focus {
     color: #333333;
+    text-decoration: none;
 }
 
 .text-dark {
@@ -4209,9 +4210,7 @@ border-left: 3px solid transparent;
     -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
 }
-.breadcrumb, .breadcrumb a {
-    color: #777777;
-}
+
 .breadcrumb .fa {
     font-size: 14px;
     margin-right: 5px;
@@ -4654,4 +4653,59 @@ ul.member-list .user-detail p, .user-view .user-detail p, .product-view .product
     overflow: auto;
     padding-right: 15px;
 }
-::-webkit-scrollbar-thumb{border-radius:4px;background:#b4b4b4}::-webkit-scrollbar{width:8px;height:8px;background:#e9e9e9}
+::-webkit-scrollbar-thumb{border-radius:4px;background:#b4b4b4}
+::-webkit-scrollbar{width:8px;height:8px;background:#e9e9e9}
+
+.modal .loader{
+  text-align: center;
+}
+.modal .loader p{
+    margin: 20px 0;
+}
+@-webkit-keyframes ball-pulse-sync {
+  33% {
+    -webkit-transform: translateY(10px);
+            transform: translateY(10px); }
+
+  66% {
+    -webkit-transform: translateY(-10px);
+            transform: translateY(-10px); }
+
+  100% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0); } }
+
+@keyframes ball-pulse-sync {
+  33% {
+    -webkit-transform: translateY(10px);
+            transform: translateY(10px); }
+
+  66% {
+    -webkit-transform: translateY(-10px);
+            transform: translateY(-10px); }
+
+  100% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0); } }
+
+.ball-pulse-sync > div:nth-child(0) {
+  -webkit-animation: ball-pulse-sync 0.6s 0s infinite ease-in-out;
+          animation: ball-pulse-sync 0.6s 0s infinite ease-in-out; }
+.ball-pulse-sync > div:nth-child(1) {
+  -webkit-animation: ball-pulse-sync 0.6s 0.07s infinite ease-in-out;
+          animation: ball-pulse-sync 0.6s 0.07s infinite ease-in-out; }
+.ball-pulse-sync > div:nth-child(2) {
+  -webkit-animation: ball-pulse-sync 0.6s 0.14s infinite ease-in-out;
+          animation: ball-pulse-sync 0.6s 0.14s infinite ease-in-out; }
+.ball-pulse-sync > div:nth-child(3) {
+  -webkit-animation: ball-pulse-sync 0.6s 0.21s infinite ease-in-out;
+          animation: ball-pulse-sync 0.6s 0.21s infinite ease-in-out; }
+.ball-pulse-sync > div {
+  background-color: #6c6c6c;
+  width: 15px;
+  height: 15px;
+  border-radius: 100%;
+  margin: 2px;
+  -webkit-animation-fill-mode: both;
+          animation-fill-mode: both;
+  display: inline-block; }

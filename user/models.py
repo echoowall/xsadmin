@@ -5,7 +5,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models import Max
 from . import utils
-import random
+import random, base64
 
 def get_usefull_port():
     max_port = User.objects.aggregate(Max('port'))['port__max']
@@ -116,6 +116,24 @@ class Node(models.Model):
 
     def __unicode__(self):
         return '%s[%s]'%(self.username,self.ip)
+
+
+    passwd = ''
+    port = ''
+
+    @property
+    def ss_url(self):
+        return 'ss://%s' % (self.ss_protocol,)
+
+    @property
+    def ss_qrcode(self):
+        return 'ss://%s' % (base64.encodebytes(self.ss_protocol.encode()).decode().strip(),)
+
+    @property
+    def ss_protocol(self):
+        return '%s:%s@%s:%s' % (self.method, self.passwd, self.ip, self.port)
+
+
 
 class InviteCode(models.Model):
 

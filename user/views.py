@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.generic import *
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import logout as auth_logout,update_session_auth_hash
-from django.shortcuts import redirect
+from django.shortcuts import redirect,get_object_or_404
 from .models import *
 from .forms import *
 from django.core.urlresolvers import reverse,reverse_lazy
@@ -74,6 +74,9 @@ class PasswordView(LoginRequiredMixin, UpdateView):
         update_session_auth_hash(request=self.request, user=form.instance)
         return response
 
+class BindEmailView(LoginRequiredMixin, UpdateView):
+    pass
+
 class NodeListView(LoginRequiredMixin, ListView):
 
     template_name = 'user/nodes.html'
@@ -83,6 +86,24 @@ class NodeListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         queryset = super().get_queryset()
         return queryset
+
+class NodeQrInfoView(LoginRequiredMixin, DetailView):
+
+    context_object_name = 'node'
+    template_name = 'user/node_qr_info.html'
+    http_method_names = ['post']
+
+    def get_object(self, queryset=None):
+        node = get_object_or_404(Node, pk= self.request.POST.get('pk',''))
+        node.passwd = self.request.user.passwd
+        node.port = self.request.user.port
+        return node
+
+    def post(self, request, *args, **kwargs):
+        return self.get(request, *args, **kwargs)
+
+
+
 
 
 
