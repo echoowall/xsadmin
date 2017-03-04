@@ -1298,3 +1298,129 @@ jQuery(function($) {
     });
 
 });
+
+var init_trans_chart_options = {
+    tooltip : {
+        formatter: "{a} <br/>{b} : {c}%"
+    },
+    toolbox: {
+        show : false,
+        feature : {
+            mark : {show: true},
+            restore : {show: true},
+            saveAsImage : {show: true}
+        }
+    },
+    series : [
+        {
+            name:'流量使用',
+            type:'gauge',
+            center: ['50%', '50%'],
+            radius: ['0%', '100%'],
+            axisLine: {
+                show: true,
+                lineStyle: {
+                    color: [
+                        [0.2, '#536DFE'],
+                        [0.8, 'rgba(63,81,181,1)'],
+                        [1, '#E91E63']
+                    ],
+                    width: 10
+                }
+            }  ,
+            title: {
+                show : true,
+
+                textStyle: {
+                    color: '#333',
+                    fontSize : 15
+                }
+            }  ,
+            detail: {
+                show : true,
+                backgroundColor: 'rgba(0,0,0,0)',
+                borderWidth: 0,
+                borderColor: '#ccc',
+                width: 100,
+                height: 40,
+                offsetCenter: [0, '40%'],
+                formatter:'{value}%',
+                textStyle: {
+                    color: 'auto',
+                    fontSize : 20
+                }
+            },
+
+            data:[{value: 50, name: '已使用比例'}]
+        }
+ ]
+};
+var init_down_up_chart_option = {
+    title:{
+        text:'上传下载情况',
+        subtext:'上传下载配比',
+        x:'center'
+    },
+    tooltip : {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c}M ({d}%)"
+    },
+    legend: {
+        orient : 'vertical',
+        x : 'left',
+        data:['上传','下载']
+    },
+
+    calculable : true,
+    series : [
+        {
+            name:'使用比例',
+            type:'pie',
+            radius : '55%',
+            center: ['50%', '60%'],
+            data:[
+                {value:0, name:'上传'},
+                {value:0, name:'下载'}
+            ]
+        }
+    ],
+    color:['rgb(233, 30, 99)','rgb(103, 58, 183)']
+};
+
+var init_trans_use_info_option = {
+    tooltip : {
+        trigger: 'axis',
+        formatter: "{b} <br/>{a} : {c}M<br/>{a1} : {c1}M"
+    },
+    legend: {
+        data:['上传','下载']
+    },
+    calculable : true,
+    xAxis : [
+        {
+            type : 'category',
+            data : []
+        }
+    ],
+    yAxis : [
+        {
+            type : 'value',
+            axisLabel:{formatter:'{value} MB'}
+        }
+    ],
+    series : [
+        {
+            name:'下载',
+            type:'bar',
+            barWidth : 20,
+            stack: 'tran',
+            data:[]
+        },
+        {
+            name:'上传',
+            type:'bar',
+            stack: 'tran',
+            data:[]
+        }
+    ]
+};

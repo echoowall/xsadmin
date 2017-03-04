@@ -2,7 +2,9 @@
 {% block content %}
 <section class="box">
     <header class="panel_header">
-        <h2 class="title pull-left">节点列表{% if node_tag %}　<small>标签含：{{ node_tag.name }}</small>{% endif %}</h2>
+        <h2 class="title pull-left"><a href="{% url 'user:nodes' %}">节点列表</a>
+            {% if node_tag %}　<small>标签含：<a href="{% url 'user:nodes' node_tag.slug %}">{{ node_tag.name }}</a></small>{% endif %}
+        </h2>
     </header>
 <div class="content-body">
     <div class="row">
