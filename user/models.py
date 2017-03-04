@@ -6,6 +6,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db.models import Max
 from . import utils
 import random, base64
+from django.core import validators
 
 def get_usefull_port():
     max_port = User.objects.aggregate(Max('port'))['port__max']
@@ -46,7 +47,7 @@ class User(AbstractUser):
         verbose_name_plural = verbose_name
         ordering = ['-id']
 
-    def __unicode__(self):
+    def __str__(self):
         return self.username
 
 
@@ -73,13 +74,15 @@ class Node(models.Model):
     )
     id = models.CharField(max_length=63, verbose_name='主键、API Key', primary_key=True, default=utils.gen_api_key, editable=False)
     name = models.CharField(max_length=63,verbose_name='节点名称')
+    location = models.CharField(max_length=127, verbose_name='节点位置')
     ip = models.GenericIPAddressField(verbose_name='节点IP地址',protocol='IPv4')
     ipv6 = models.GenericIPAddressField(blank=True, null= True , protocol='IPv6', verbose_name='节点IPv6地址')
     method = models.CharField(choices=METHOD_CHOICES,max_length=63, default='chacha20', verbose_name='节点加密方式')
     info = models.TextField(max_length=255, verbose_name='节点信息')
-    status = models.CharField(max_length=63, choices=STATUS_CHOICES,default='INIT',verbose_name='节点状态')
-    traffic_rate = models.DecimalField(verbose_name='流量倍率',max_digits=8,decimal_places=2,default=1.00)
-    sort = models.SmallIntegerField(verbose_name='排序',default=0,help_text='小的在前面')
+    status = models.CharField(max_length=63, choices=STATUS_CHOICES,default='INIT', verbose_name='节点状态')
+    traffic_rate = models.DecimalField(verbose_name='流量倍率', max_digits=8, decimal_places=2, default=1.00)
+    sort = models.SmallIntegerField(verbose_name='排序', default=0, help_text='小的在前面')
+    tags = models.ManyToManyField('NodeTag', verbose_name='标签集合', blank=True)
 
     #SSR属性
     ORIGIN_CHOICES = (
@@ -114,8 +117,8 @@ class Node(models.Model):
         verbose_name_plural = verbose_name
         ordering = ['sort','id']
 
-    def __unicode__(self):
-        return '%s[%s]'%(self.username,self.ip)
+    def __str__(self):
+        return '%s[%s]'%(self.name,self.ip)
 
 
     passwd = ''
@@ -133,7 +136,18 @@ class Node(models.Model):
     def ss_protocol(self):
         return '%s:%s@%s:%s' % (self.method, self.passwd, self.ip, self.port)
 
+class NodeTag(models.Model):
 
+    slug = models.CharField(max_length=63,verbose_name='标识', help_text='请使用字母、数字、下划线、中划线组成，不可重复', primary_key=True,
+                validators= (validators.RegexValidator(r'[\w-]+'),), unique=True,)
+    name = models.CharField(max_length=63, verbose_name='标签名称')
+
+    class Meta:
+        verbose_name = '节点标签'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return '%s:%s' % (self.slug, self.name)
 
 class InviteCode(models.Model):
 
@@ -162,7 +176,7 @@ class InviteCode(models.Model):
         verbose_name_plural = verbose_name
         ordering = ['-id']
 
-    def __unicode__(self):
+    def __str__(self):
         return '[%s]%s'%(self.code,'可用' if self.enable else '失效')
 
 

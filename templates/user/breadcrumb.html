@@ -7,7 +7,7 @@
             <ol class="breadcrumb">
                 {% for bread in USER_BREADCRUMBS %}
                     <li>
-                        <a href="{{ bread.url|default:'javascript:void(0)' }}">
+                        <a href="{% if bread.url_name %}{% url bread.url_name %}{% else %}javascript:void(0){% endif %}">
                             {% if forloop.first %}<i class="fa fa-{{ bread.icon }}"></i>{% endif %} {{ bread.title }}
                         </a>
                     </li>

@@ -24,16 +24,16 @@ urlpatterns = [
     url(r'^profile/$', ProfileView.as_view(), name='profile'),
     url(r'^passwd/$', PasswdView.as_view(), name='passwd'),
     url(r'^password/$', PasswordView.as_view(), name='password'),
-    url(r'^nodes/$', NodeListView.as_view(), name='nodes'),
+    url(r'^nodes/(?P<tag_slug>[\w-]+)?$', NodeListView.as_view(), name='nodes'),
     url(r'^node_qr_info/$', NodeQrInfoView.as_view(), name= 'node_qr_info')
 ]
 
 menus = (
-    {'title': '仪表盘', 'title_en': 'Dashboard', 'icon': 'dashboard', 'url': reverse_lazy('user:dashboard'), 'children': ()},
-    {'title': '用户中心', 'title_en': 'User Center','icon': 'user', 'url': '', 'children': (
-        {'title': '我的信息', 'title_en': 'My Profile', 'icon': 'users', 'url': reverse_lazy('user:profile')},
-        {'title': '安全设置', 'title_en': 'Safe Setting', 'icon': 'user-secret', 'url': reverse_lazy('user:password')},
-        {'title': '连接设置', 'title_en': 'Connection Setting', 'icon': 'connectdevelop', 'url': reverse_lazy('user:passwd')},
+    {'title': '仪表盘', 'title_en': 'Dashboard', 'icon': 'dashboard', 'url_name': 'user:dashboard', 'children': ()},
+    {'title': '用户中心', 'title_en': 'User Center','icon': 'user', 'url_name': '', 'children': (
+        {'title': '我的信息', 'title_en': 'My Profile', 'icon': 'users', 'url_name': 'user:profile'},
+        {'title': '安全设置', 'title_en': 'Safe Setting', 'icon': 'user-secret', 'url_name': 'user:password'},
+        {'title': '连接设置', 'title_en': 'Connection Setting', 'icon': 'connectdevelop', 'url_name': 'user:passwd'},
     )},
-    {'title': '节点中心', 'title_en': 'Node Center', 'icon': 'codepen', 'url': reverse_lazy('user:nodes'), 'children': ()},
+    {'title': '节点中心', 'title_en': 'Node Center', 'icon': 'codepen', 'url_name': 'user:nodes', 'children': ()},
 )

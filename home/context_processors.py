@@ -12,29 +12,30 @@ import copy
 
 def site_config(request):
     siteconf =  settings.SITE_CONFIG
-    if 'user' in resolve(request.path).app_names:
-        siteconf['USER_MENUS'], siteconf['USER_BREADCRUMBS'] = get_menus_breadcrumbs(request)
+    path_resovle = resolve(request.path)
+    #print('path_resovle:',path_resovle)
+    if 'user' in path_resovle.app_names:
+        siteconf['USER_MENUS'], siteconf['USER_BREADCRUMBS'] = get_menus_breadcrumbs('user:'+path_resovle.url_name)
         now_bread = siteconf['USER_BREADCRUMBS'][-1]
         siteconf['USER_BREADCRUMBS_TITLE'] = now_bread.get('title','')+' | '+now_bread.get('title_en','')
         siteconf['USER_DASHBOARD_TITLE'] = now_bread.get('title','无标题')
     return siteconf
 
-def get_menus_breadcrumbs(request ):
-    path = request.path
+def get_menus_breadcrumbs(url_name ):
     temp_menus = copy.deepcopy(menus)
     for menu in temp_menus:
-        if path == menu.get('url', ''):
+        if url_name == menu.get('url_name', ''):
             menu['open'] = 'open'
             return temp_menus, (menu,)
         menu_subs = menu.get('children', ())
         for menu_sub in menu_subs:
-            if path == menu_sub.get('url', ''):
+            if url_name == menu_sub.get('url_name', ''):
                 menu['open'] = 'open'
                 menu_sub['active'] = 'active'
                 return temp_menus, (menu, menu_sub)
             menu_subs_subs = menu_sub.get('children', ())
             for menu_sub_sub in menu_subs_subs:
-                if path == menu_sub_sub.get('url', ''):
+                if url_name == menu_sub_sub.get('url_name', ''):
                     menu['open'] = 'open'
                     menu_sub['active'] = 'active'
                     return temp_menus, (menu, menu_sub, menu_sub_sub)

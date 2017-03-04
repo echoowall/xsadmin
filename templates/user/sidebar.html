@@ -32,14 +32,14 @@
 
                 <ul class="sub-menu" {% if menu.open %}style="display:block;" {% endif %}>
                 {% for sub_menu in menu.children %}
-                    <li><a class="{{ sub_menu.active|default:'' }}" href="{{ sub_menu.url }}" >
+                    <li><a class="{{ sub_menu.active|default:'' }}" href="{% url sub_menu.url_name %}" >
                         <i class="fa fa-{{ sub_menu.icon }}"></i>
                         {{ sub_menu.title }}</a>
                     </li>
                 {% endfor %}
                 </ul>
                 {% else %}
-                 <a href="{{ menu.url }}">
+                 <a href="{% url menu.url_name %}">
                     <i class="fa fa-{{ menu.icon }}"></i>
                     <span class="title">{{ menu.title }}</span>
                 </a>

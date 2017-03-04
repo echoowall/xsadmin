@@ -6,5 +6,6 @@ from .models import *
 
 admin.site.register(User)
 admin.site.register(Node)
+admin.site.register(NodeTag)
 admin.site.register(InviteCode)
 

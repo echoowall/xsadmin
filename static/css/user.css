@@ -4567,6 +4567,9 @@ border-left: 3px solid transparent;
 	font-size: 14px;
 	color: #a0a0a0;
 }
+.job-ad-item .ad-meta a:hover,.job-ad-item .ad-meta a:focus{
+    color:#555555;
+}
 
 .job-ad-item .ad-meta i,
 .job-ad-item .ad-meta a i {

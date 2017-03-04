@@ -6,6 +6,7 @@ from django.shortcuts import redirect,get_object_or_404
 from .models import *
 from .forms import *
 from django.core.urlresolvers import reverse,reverse_lazy
+from django.db.models import Q
 
 
 # Create your views here.
@@ -80,11 +81,21 @@ class BindEmailView(LoginRequiredMixin, UpdateView):
 class NodeListView(LoginRequiredMixin, ListView):
 
     template_name = 'user/nodes.html'
-    model = Node
     context_object_name = 'nodeLists'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        tag_slug = self.kwargs.get('tag_slug')
+        if tag_slug:
+            context['node_tag'] = get_object_or_404(NodeTag, slug= tag_slug)
+        return context
+
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = Node.objects.filter(~Q(status__iexact='OUT'))
+        tag_slug = self.kwargs.get('tag_slug')
+        #print(tag,type(tag))
+        if tag_slug:
+            queryset = queryset.filter(tags= tag_slug)
         return queryset
 
 class NodeQrInfoView(LoginRequiredMixin, DetailView):
@@ -94,7 +105,7 @@ class NodeQrInfoView(LoginRequiredMixin, DetailView):
     http_method_names = ['post']
 
     def get_object(self, queryset=None):
-        node = get_object_or_404(Node, pk= self.request.POST.get('pk',''))
+        node = get_object_or_404(Node, ~Q(status__iexact='OUT'), pk= self.request.POST.get('pk',''))
         node.passwd = self.request.user.passwd
         node.port = self.request.user.port
         return node

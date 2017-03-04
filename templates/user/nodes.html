@@ -2,7 +2,7 @@
 {% block content %}
 <section class="box">
     <header class="panel_header">
-        <h2 class="title pull-left">节点列表</h2>
+        <h2 class="title pull-left">节点列表{% if node_tag %}　<small>标签含：{{ node_tag.name }}</small>{% endif %}</h2>
     </header>
 <div class="content-body">
     <div class="row">
@@ -22,10 +22,10 @@
                         <div class="node-info">{{ node.info }}</div>
                         <div class="ad-meta">
                             <ul>
-                                <li><i class="fa fa-map-marker" aria-hidden="true"></i>San Francisco, CA, US</li>
-                                <li><i class="fa fa-clock-o" aria-hidden="true"></i><code>{{ node.method }}</code></li>
-                                <li><i class="fa fa-money" aria-hidden="true"></i>{{ node.get_status_display }}</li>
-                                <li><i class="fa fa-tags" aria-hidden="true"></i>G口、大水管</li>
+                                <li><i class="fa fa-map-marker" aria-hidden="true"></i>{{ node.location }}</li>
+                                <li><i class="fa fa-get-pocket" aria-hidden="true"></i><code>{{ node.method }}</code></li>
+                                <li><i class="fa fa-heartbeat" aria-hidden="true"></i>{{ node.get_status_display }}</li>
+                                <li><i class="fa fa-tags" aria-hidden="true"></i> {% for tag in node.tags.all %}<a href="{% url 'user:nodes' tag.slug %}">{{ tag.name }}</a>{% if not forloop.last %}、{% endif %}{% endfor %}</li>
                             </ul>
                         </div><!-- ad-meta -->
                     </div><!-- ad-info -->
