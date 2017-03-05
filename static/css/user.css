@@ -4720,7 +4720,9 @@ ul.member-list .user-detail p, .user-view .user-detail p, .product-view .product
 .blog_post {
     display: inline-block;
     width: 100%;
-    margin: 0 0 60px 0;
+    margin-bottom: 45px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e5e5e5;
 }
 .full_blog_post {
     margin: 0 0 15px 0;
