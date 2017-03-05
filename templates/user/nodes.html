@@ -27,7 +27,7 @@
                                 <li><i class="fa fa-map-marker" aria-hidden="true"></i>{{ node.location }}</li>
                                 <li><i class="fa fa-get-pocket" aria-hidden="true"></i><code>{{ node.method }}</code></li>
                                 <li><i class="fa fa-heartbeat" aria-hidden="true"></i>{{ node.get_status_display }}</li>
-                                <li><i class="fa fa-tags" aria-hidden="true"></i> {% for tag in node.tags.all %}<a href="{% url 'user:nodes' tag.slug %}">{{ tag.name }}</a>{% if not forloop.last %}、{% endif %}{% endfor %}</li>
+                                {% for tag in node.tags.all %}{% if forloop.first %}<li><i class="fa fa-tags" aria-hidden="true"></i> {% endif %}<a href="{% url 'user:nodes' tag.slug %}">{{ tag.name }}</a>{% if not forloop.last %}、{% endif %}{% endfor %}</li>
                             </ul>
                         </div><!-- ad-meta -->
                     </div><!-- ad-info -->

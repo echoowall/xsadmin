@@ -22,7 +22,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['post_list'] = Post.objects.filter(status__iexact='PUBLISHED')[:10]
+        context['post_list'] = Post.objects.filter(status__iexact='PUBLISHED',content_type__iexact='ANNOUNCE')[:10]
         return context
 
 class ProfileView(LoginRequiredMixin, UpdateView):
@@ -122,7 +122,14 @@ class NodeQrInfoView(LoginRequiredMixin, DetailView):
 class PostDetailView(DetailView):
     model = Post
 
+    def get_queryset(self):
+        queryset = super().get_queryset().filter(status__iexact='PUBLISHED',content_type__iexact='ANNOUNCE')
+        return queryset
+
 class PostListView(ListView):
-    paginate_by = 2
+    paginate_by = 10
     model = Post
 
+    def get_queryset(self):
+        queryset = super().get_queryset().filter(status__iexact='PUBLISHED',content_type__iexact='ANNOUNCE')
+        return queryset

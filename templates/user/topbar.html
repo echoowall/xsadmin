@@ -293,8 +293,13 @@
         </div>
         <div class='pull-right'>
             <ul class="info-menu right-links list-inline list-unstyled">
+                {% if user.is_staff %}
+                <li class="admin-menu">
+                    <a class='' href="{% url 'admin:index' %}" target="_blank">后台管理</a>
+                </li>
+                {% endif %}
                 <li class="profile">
-                    <a href="#" data-toggle="dropdown" class="toggle">
+                    <a href="javascript:void(0)" data-toggle="dropdown" class="toggle">
                         <img src="{% static 'images/avatars/' %}{{ user.avatar }}" alt="user-image" class="img-circle img-inline">
                         <span>{{ user.get_full_name|default:user.username }} <i class="fa fa-angle-down"></i></span>
                     </a>

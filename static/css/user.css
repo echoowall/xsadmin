@@ -4712,3 +4712,64 @@ ul.member-list .user-detail p, .user-view .user-detail p, .product-view .product
   -webkit-animation-fill-mode: both;
           animation-fill-mode: both;
   display: inline-block; }
+/*-----------------------------------------------------------
+    Blogs
+----------------------------------------------------------*/
+
+.blog_post {
+    display: inline-block;
+    width: 100%;
+    margin: 0 0 60px 0;
+}
+.full_blog_post {
+    margin: 0 0 15px 0;
+}
+.blog_post h3 {
+    margin: 0 0 15px 0;
+}
+.blog_post h5 {
+    margin: 0 0 15px 0;
+}
+.blog_info {
+    margin: 0 0 15px 0;
+}
+.blog_info a, .blog_info i {
+    margin-right: 5px;
+}
+.blog-content {
+    margin: 0px 0 30px 0;
+    display: inline-block;
+    width: 100%;
+}
+.media-object {
+    max-height: 250px;
+    margin: 15px 0 30px 0;
+    max-width: 800px;
+    width: 100%;
+    height: auto;
+}
+.comment-block.row{
+    margin-left: 0px;
+    margin-right: 0px;
+}
+.full_blog_post .comment-block img {
+    width: 100%;
+    height: auto;
+    max-width: 66px;
+}
+.full_blog_post .comment-block .img-area {
+    padding: 0px;
+}
+.full_blog_post .comment-block.level-2 {
+    margin-left: 45px;
+}
+.full_blog_post .comment-block.level-3 {
+    margin-left: 90px;
+}
+
+.right-links .admin-menu{
+margin-right: 8px;
+}
+.right-links .admin-menu a{
+    color: #ffffff;
+}

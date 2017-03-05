@@ -192,6 +192,7 @@ class Post(models.Model):
     created_time = models.DateTimeField('创建时间',auto_now_add=True)
     last_modified_time = models.DateTimeField('修改时间',auto_now=True)
     status = models.CharField('文章状态', max_length=31, choices=(('PUBLISHED','已发布'),('DRAFT','草稿')), default='DRAFT')
+    content_type = models.CharField('内容类型', max_length=31, choices=(('ANNOUNCE', '站内通告'), ('PAGE','页面'), ('OTHER', '其他类型')), default= 'ANNOUNCE')
     abstract = models.CharField('摘要', max_length=63, blank=True, null=True, help_text="可选，如若为空将摘取正文的前54个字符")
     topped = models.BooleanField('置顶', default=False)
 
@@ -199,7 +200,7 @@ class Post(models.Model):
         return '%s [%s]'%(self.title, self.get_status_display())
 
     class Meta:
-        verbose_name = '站内通告'
+        verbose_name = '文章内容'
         verbose_name_plural = verbose_name
         ordering = ['-topped','-last_modified_time']
 

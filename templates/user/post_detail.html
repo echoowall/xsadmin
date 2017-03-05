@@ -2,13 +2,22 @@
 {% block content %}
 <section class="box">
 <header class="panel_header">
-    <h2 class="title pull-left">{{ object.title }}</h2>
+    <h2 class="title pull-left">通告详细</h2>
 </header>
 <div class="content-body">
     <div class="row">
         <div class="col-md-12">
-            {{ object.body|safe }}
+            <div class="blog_post full_blog_post">
+                <h3><a href="{% url 'user:post_detail' object.pk %}">{{ object.title }}</a></h3>
+                <h5><i class="fa fa-calendar"></i> {{ object.last_modified_time }}</h5>
+                <p class="blog-content">
+                    {{ object.body|safe }}
+                </p>
+            </div>
         </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12"><a href="{% url 'user:posts' %}"><i class="fa fa-angle-double-left"></i> 返回查看列表</a> </div>
     </div>
 </div>
 </section>

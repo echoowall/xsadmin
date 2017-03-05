@@ -54,6 +54,9 @@
                         <div class="feed-element">
                             <div class="feed-head"><a href="{% url 'user:post_detail' post.pk %}">{{ post.title }}</a></div>
                             <div class="feed-content">
+                                <p><i class="fa fa-calendar"></i> {{ post.last_modified_time }}</p>
+                            </div>
+                            <div class="feed-content">
                                 <p>{{ post.abstract }}</p>
                             </div>
                         </div>
