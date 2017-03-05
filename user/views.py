@@ -20,6 +20,11 @@ class LogoutView(LoginRequiredMixin, View):
 class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'user/dashboard.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['post_list'] = Post.objects.filter(status__iexact='PUBLISHED')[:10]
+        return context
+
 class ProfileView(LoginRequiredMixin, UpdateView):
 
     form_class = ProfileForm
@@ -114,7 +119,10 @@ class NodeQrInfoView(LoginRequiredMixin, DetailView):
         return self.get(request, *args, **kwargs)
 
 
+class PostDetailView(DetailView):
+    model = Post
 
-
-
+class PostListView(ListView):
+    paginate_by = 2
+    model = Post
 

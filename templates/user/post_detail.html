@@ -1,0 +1,15 @@
+{% extends './layout.html' %}
+{% block content %}
+<section class="box">
+<header class="panel_header">
+    <h2 class="title pull-left">{{ object.title }}</h2>
+</header>
+<div class="content-body">
+    <div class="row">
+        <div class="col-md-12">
+            {{ object.body|safe }}
+        </div>
+    </div>
+</div>
+</section>
+{% endblock %}

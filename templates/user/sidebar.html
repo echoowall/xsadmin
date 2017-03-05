@@ -23,7 +23,7 @@
         <ul class='wraplist'>
             {% for menu in USER_MENUS %}
             <li class="{{ menu.open|default:'' }}">
-                {% if menu.children|length > 0 %}
+                {% if not menu.url_name %}
                 <a href="javascript:void(0);">
                     <i class="fa fa-{{ menu.icon }}"></i>
                     <span class="title">{{ menu.title }}</span>

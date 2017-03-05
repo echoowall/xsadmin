@@ -9,3 +9,5 @@ admin.site.register(Node)
 admin.site.register(NodeTag)
 admin.site.register(InviteCode)
 
+admin.site.register(Post)
+

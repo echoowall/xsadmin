@@ -7,6 +7,7 @@ from django.db.models import Max
 from . import utils
 import random, base64
 from django.core import validators
+from django.urls import reverse
 
 def get_usefull_port():
     max_port = User.objects.aggregate(Max('port'))['port__max']
@@ -50,7 +51,7 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
-
+#节点模型
 class Node(models.Model):
     METHOD_CHOICES = (
         ('rc4-md5', 'rc4-md5'),
@@ -136,6 +137,7 @@ class Node(models.Model):
     def ss_protocol(self):
         return '%s:%s@%s:%s' % (self.method, self.passwd, self.ip, self.port)
 
+#节点标签模型
 class NodeTag(models.Model):
 
     slug = models.CharField(max_length=63,verbose_name='标识', help_text='请使用字母、数字、下划线、中划线组成，不可重复', primary_key=True,
@@ -149,6 +151,7 @@ class NodeTag(models.Model):
     def __str__(self):
         return '%s:%s' % (self.slug, self.name)
 
+#邀请码模型
 class InviteCode(models.Model):
 
     code = models.CharField(max_length=127,verbose_name='邀请码',default=utils.gen_invite_code,unique=True)
@@ -179,5 +182,26 @@ class InviteCode(models.Model):
     def __str__(self):
         return '[%s]%s'%(self.code,'可用' if self.enable else '失效')
 
+#站内文章模型
+class Post(models.Model):
+    slug = models.CharField(max_length=255,verbose_name='内容标识Slug', unique=True,
+                validators= (validators.RegexValidator(r'[\w-]+'),),
+                help_text='请使用字母、数字、下划线、中划线组成，不可重复')
+    title = models.CharField('标题', max_length=255)
+    body = models.TextField('正文')
+    created_time = models.DateTimeField('创建时间',auto_now_add=True)
+    last_modified_time = models.DateTimeField('修改时间',auto_now=True)
+    status = models.CharField('文章状态', max_length=31, choices=(('PUBLISHED','已发布'),('DRAFT','草稿')), default='DRAFT')
+    abstract = models.CharField('摘要', max_length=63, blank=True, null=True, help_text="可选，如若为空将摘取正文的前54个字符")
+    topped = models.BooleanField('置顶', default=False)
 
+    def __str__(self):
+        return '%s [%s]'%(self.title, self.get_status_display())
 
+    class Meta:
+        verbose_name = '站内通告'
+        verbose_name_plural = verbose_name
+        ordering = ['-topped','-last_modified_time']
+
+    def get_absolute_url(self):
+        return reverse('user:post_detail', kwargs={'pk': self.pk})

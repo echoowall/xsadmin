@@ -1,0 +1,26 @@
+{% extends './layout.html' %}
+{% block content %}
+<section class="box">
+<div class="content-body">
+    <ul class="list-item">
+        {% for post in object_list %}
+        <li>
+            <div class="feed-element">
+                <div class="feed-head"><a href="{% url 'user:post_detail' post.pk %}">{{ post.title }}</a></div>
+                <div class="feed-content">
+                    <p>{{ post.abstract }}</p>
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+<div class="pagination">
+    当前第{{ page_obj.number }}页/ 共{{ paginator.num_pages }}页 / 每页显示{{ paginator.per_page }}条 / 共{{ paginator.count }}条
+    <a href="{% url 'user:posts'  %}?page=1">首页</a>
+    <a href="{% if page_obj.has_previous %}{% url 'user:posts'  %}?page={{ page_obj.previous_page_number }}{% else %}javascript:void(0);{% endif %}">上一页</a>
+    <a href="{% if page_obj.has_next %}{% url 'user:posts'  %}?page={{ page_obj.next_page_number }}{% else %}javascript:void(0);{% endif %}">下一页</a>
+    <a href="{% url 'user:posts'  %}?page={{ paginator.num_pages }}">尾页</a>
+</div>
+</div>
+</section>
+{% endblock %}

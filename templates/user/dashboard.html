@@ -16,7 +16,8 @@
                       </div>
                     </div>
                     <div class="col-xs-12">
-                        <p>已使用：<span id="tran-used-value"></span>M / 剩余：<span id="tran-remain-value"></span>M</p>
+                        <p>已使用：<span id="tran-used-value"></span>M / 剩余：<span id="tran-remain-value"></span>M
+                        / 配额：<span id="tran-enable-value"></span>M</p>
                     </div>
                     </div> <!-- End .row -->
                 </div>
@@ -48,27 +49,19 @@
             </header>
             <div class="content-body">
                 <ul class="list-item">
-                    {% for i in '12345'|make_list %}
+                    {% for post in post_list %}
                     <li>
                         <div class="feed-element">
-                            <div class="feed-head"><a href="#/">线路节点调整公告</a></div>
+                            <div class="feed-head"><a href="{% url 'user:post_detail' post.pk %}">{{ post.title }}</a></div>
                             <div class="feed-content">
-                                <p>日本Linode 已经更新新的IP地址！新增 新加坡节点~ :)</p>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="feed-element">
-                            <div class="feed-head"><a href="#/">新增一条韩国线路</a></div>
-                            <div class="feed-content">
-                                <p>新增一条韩国线路。有需要的可以使用。韩国线路是Krpyt数据中心，线路优秀，电信直连，100M大水管带宽，流量充裕  :)</p>
+                                <p>{{ post.abstract }}</p>
                             </div>
                         </div>
                     </li>
                     {% endfor %}
                 </ul>
             </div>
-            <button class="btn btn-info btn-block btn-2x">查看更多</button>
+            <a class="btn btn-info btn-block btn-2x" href="{% url 'user:posts' %}">查看更多</a>
         </section>
     </div>
 </div>
@@ -100,6 +93,7 @@
         var trans_chart = echarts.init(document.getElementById('trans_chart'));
         init_trans_chart_options.series[0].data[0].value = (({{ user.u }}+{{ user.d }})/({{ user.transfer_enable }}+1)*100).toFixed(2);
         $("#tran-used-value").html((({{ user.u }}+{{ user.d }})/1048576).toFixed(2));
+        $("#tran-enable-value").html((({{ user.transfer_enable }})/1048576).toFixed(2));
         $("#tran-remain-value").html((({{ user.transfer_enable }}-{{ user.u }}-{{ user.d }})/1048576).toFixed(2));
         trans_chart.setOption(init_trans_chart_options,true);
         //上传下载对比
