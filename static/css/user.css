@@ -685,6 +685,7 @@ a:hover, a:focus {
     -ms-box-shadow: 0 0 10px 0 rgba(33,33,33,.2);
     min-height: 100%;
     height: auto;
+    z-index: 98;
 }
 
 .page-sidebar.fixedscroll {
@@ -2790,7 +2791,7 @@ ul.states li {
   Page Layout - Sidebar, Chat API toggle interactions
 -----------------------------------------------------------*/
 
-#main-content, .page-chatapi, .page-topbar, .page-sidebar,.page-topbar .logo-area, .page-topbar .logo-area span,.logo-area img, .page-topbar .quick-area .pull-right, .collapse-wraplist, .profile-info, .wraplist, .chatapi-windows {
+#main-content, #main-footer,.page-chatapi, .page-topbar, .page-sidebar,.page-topbar .logo-area, .page-topbar .logo-area span,.logo-area img, .page-topbar .quick-area .pull-right, .collapse-wraplist, .profile-info, .wraplist, .chatapi-windows {
     -webkit-transition: 600ms;
     -moz-transition: 600ms;
     -o-transition: 600ms;
@@ -2817,7 +2818,7 @@ ul.states li {
     margin-left: 0px !important;
     z-index: 99;
 }
-#main-content {
+#main-content ,#main-footer{
     margin-left: 260px;
     display: block;
 }
@@ -4773,3 +4774,38 @@ margin-right: 8px;
 .right-links .admin-menu a{
     color: #ffffff;
 }
+
+/**footer调优*/
+html, body{
+height:100%;
+}
+#content-wrap{
+	min-height:100%; /*使内容高度和body一样*/
+	margin-bottom:-54px;/*向上缩减80像素，不至于footer超出屏幕可视范围*/
+}
+#content-real-content{
+	padding-bottom: 54px; /*这个是关键，处理页面高度超出屏幕可视范围时，控制内容和底部高度之间距离*/
+}
+/** footer **/
+#main-footer {
+    background: #fff;
+    padding: 15px;
+    color: #444;
+    border-top: 1px solid #eee;
+    height:54px;
+    margin-top: -54px;
+    position: relative;
+    clear: both;
+}
+#main-footer.sidebar_shift{
+    margin-left: 60px;
+}
+.clearfix:after {content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+.clearfix {display: inline-block;}
+* html .clearfix { height: 1%;}
+.clearfix {display: block;}

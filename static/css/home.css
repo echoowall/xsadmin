@@ -867,3 +867,30 @@ form .val-error {
 /**
 登录注册部分结束
 */
+
+html, body{
+height:100%;
+}
+#content-wrap{
+	min-height:100%; /*使内容高度和body一样*/
+	margin-bottom:-60px;/*向上缩减80像素，不至于footer超出屏幕可视范围*/
+}
+#content-real-content{
+	padding-bottom:60px; /*这个是关键，处理页面高度超出屏幕可视范围时，控制内容和底部高度之间距离*/
+}
+#main-footer{
+	position: relative;
+	background: #333;
+    margin-top: -60px;
+    height: 60px;
+    clear:both;
+}
+.clearfix:after {content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+.clearfix {display: inline-block;}
+* html .clearfix { height: 1%;}
+.clearfix {display: block;}

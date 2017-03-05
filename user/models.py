@@ -10,8 +10,8 @@ from django.core import validators
 from django.urls import reverse
 
 def get_usefull_port():
-    max_port = User.objects.aggregate(Max('port'))['port__max']
-    new_port = int(max_port) + random.randint(2,5)
+    max_port = User.objects.aggregate(Max('port')).get('port__max', 13215)
+    new_port = int(max_port) + random.randint(2, 5)
     return new_port
 
 # 用户模型.

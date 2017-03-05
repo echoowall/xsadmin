@@ -20,6 +20,7 @@ def site_config(request):
         siteconf['USER_BREADCRUMBS_TITLE'] = now_bread.get('title','')+' | '+now_bread.get('title_en','')
         siteconf['USER_DASHBOARD_TITLE'] = now_bread.get('title','无标题')
     #print('siteconf',siteconf)
+    siteconf.update(settings.PROJECT_CONFIG)
     return siteconf
 
 def get_menus_breadcrumbs(url_name ):

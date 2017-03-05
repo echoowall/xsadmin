@@ -115,8 +115,19 @@ AUTH_USER_MODEL = 'user.User'
 AUTHENTICATION_BACKENDS = (
     'home.authentication.EmailUsernameAuthBackend',
 )
-from .settings_custom import *
 
 CRISPY_TEMPLATE_PACK  =  'bootstrap3'
 LOGIN_REDIRECT_URL = '/user/'
 LOGIN_URL = '/login/'
+
+PROJECT_CONFIG = {
+    'PROJECT_NAME':'xsadmin',
+    'PROJECT_URL':'https://github.com/alishtory/xsadmin',
+    'PROJECT_VERSION':'1.0.3',
+}
+
+#放在底部
+from .settings_custom import *
+
+
+
