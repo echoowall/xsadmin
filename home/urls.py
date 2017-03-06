@@ -11,10 +11,10 @@ from .views import *
 app_name = 'home'
 
 urlpatterns = [
-    url(r'^(index/)?$', IndexView.as_view(),name='index'),
-    url(r'^download/$', DownloadView.as_view(),name='download'),
-    url(r'^about/$', AboutView.as_view(),name='about'),
     url(r'^login/$', LoginView.as_view(),name='login'),
     url(r'^register/$',RegisterView.as_view(),name='register'),
     url(r'^get_gee_captcha/$', GeeCaptchaView.as_view(), name='get_gee_captcha'),
+    url(r'^code\.html$', InviteCodeView.as_view(), name='invite_code'),
+    url(r'^(?P<slug>[\w-]+)\.html$', PostPageView.as_view(), name= 'post_page'),
+    url(r'^(index/)?$', PostPageView.as_view(), name='index'),
 ]

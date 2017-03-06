@@ -11,14 +11,9 @@ from .views import *
 from django.views.generic import TemplateView
 from django.urls import reverse_lazy
 
-class TemplateAutoView(TemplateView):
-    def get_template_names(self):
-        return 'user/'+self.kwargs['template_name']+'.html'
-
 app_name = 'user'
 
 urlpatterns = [
-    url(r'^tp/(?P<template_name>\w+).html$', TemplateAutoView.as_view()),
     url(r'^logout/$', LogoutView.as_view(), name='logout'),
     url(r'^(index/|dashboard/)?$', DashboardView.as_view(),name='dashboard'),
     url(r'^profile/$', ProfileView.as_view(), name='profile'),

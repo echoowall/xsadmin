@@ -12,17 +12,10 @@ from django.http import HttpResponse,HttpResponseForbidden
 from geetest import GeetestLib
 from django.core.exceptions import PermissionDenied
 from user import utils as UserUtils
+from user.models import Post
+from django.http.response import Http404
 
 # Create your views here.
-
-class IndexView(TemplateView):
-    template_name = 'home/index.html'
-
-class DownloadView(TemplateView):
-    template_name = 'home/download.html'
-
-class AboutView(TemplateView):
-    template_name = 'home/about.html'
 
 REDIRECT_FIELD_NAME = 'next'
 
@@ -123,3 +116,32 @@ class GeeCaptchaView(View):
         response_str = gt.get_response_str()
         return HttpResponse(response_str, content_type='application/json')
 
+class InviteCodeView(TemplateView):
+    template_name = 'home/code.html'
+
+class PostPageView(TemplateView):
+
+    page_temp_list = ('index', 'about', 'download', 'faq', 'tos')
+    page = None
+    default_slug = 'index'
+    current_slug = default_slug
+
+    def get_template_names(self):
+        if self.page is None:
+            if self.current_slug in self.page_temp_list:
+                return 'home/%s.html' % self.current_slug
+            else:
+                raise Http404('No That Page!')
+        else:
+            return 'home/post_page.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        self.current_slug = self.kwargs.get('slug', self.default_slug)
+        try:
+            page = Post.objects.get(slug__iexact= self.current_slug, content_type= 'PAGE', status= 'PUBLISHED')
+            self.page = page
+            context['page'] = page
+        except Post.DoesNotExist or Post.MultipleObjectsReturned:
+            pass
+        return context

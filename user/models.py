@@ -8,6 +8,7 @@ from . import utils
 import random, base64
 from django.core import validators
 from django.urls import reverse
+from django_summernote.models import AbstractAttachment
 
 def get_usefull_port():
     max_port = User.objects.aggregate(Max('port')).get('port__max', 13215)
@@ -206,3 +207,14 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('user:post_detail', kwargs={'pk': self.pk})
+
+
+#附件模型
+class Attachment(AbstractAttachment):
+    rename = models.BooleanField(verbose_name='是否重命名', default=True,
+        help_text='如果选中，则会随机重命名；否则不会重命名，但是有覆盖已有同名文件风险。')
+
+    class Meta:
+        verbose_name = '附件'
+        verbose_name_plural = verbose_name
+        ordering = ['-uploaded']

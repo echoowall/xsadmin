@@ -10,7 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 # -*- coding:utf-8 -*-
-import os
+import os, datetime
+from user import utils as user_utils
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -32,6 +33,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'crispy_forms',
+    'django_summernote',
     'home',
     'user',
 ]
@@ -109,6 +111,75 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+
+MEDIA_ROOT = 'upload/'
+MEDIA_URL = '/upload/'
+
+def uploaded_filepath(instance, filename):
+    if instance.rename:
+        ext = filename.split('.')[-1]
+        filename = "%s.%s" % (user_utils.gen_api_key(), ext)
+    today = datetime.datetime.now()
+    return os.path.join(str(today.year), str(today.month), filename)
+
+SUMMERNOTE_CONFIG = {
+    'attachment_upload_to': uploaded_filepath,
+    'attachment_model': 'user.Attachment',
+    # Using SummernoteWidget - iframe mode
+    'iframe': False,  # or set False to use SummernoteInplaceWidget - no iframe mode
+    # Using Summernote Air-mode
+    'airMode': False,
+    'lang': 'zh-CN',
+    # Use native HTML tags (`<b>`, `<i>`, ...) instead of style attributes
+    # (Firefox, Chrome only)
+    'styleWithTags': True,
+    # Set text direction : 'left to right' is default.
+    'direction': 'ltr',
+    # Customize toolbar buttons
+    'width': '72%',
+    'height': 500,
+    'toolbar': [
+        ['style', ['style']],
+        ['font', ['bold', 'italic', 'underline', 'superscript', 'subscript', 'strikethrough', 'clear']],
+        ['fontname', ['fontname']],
+        ['fontsize', ['fontsize']],
+        ['color', ['color']],
+        ['para', ['ul', 'ol', 'paragraph']],
+        ['height', ['height']],
+        ['table', ['table']],
+        ['insert', ['link', 'picture', 'hr']],
+        ['view', ['fullscreen', 'codeview']],
+        ['help', ['help']],
+    ],
+    # Need authentication while uploading attachments.
+    'attachment_require_authentication': True,
+    'default_css': (
+        '//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css',
+        '//cdn.bootcss.com/summernote/0.8.2/summernote.css',
+    ),
+    'default_js': (
+        '//cdn.bootcss.com/jquery/1.12.4/jquery.min.js',
+        '//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js',
+        '//cdn.bootcss.com/jqueryui/1.10.4/jquery.ui.widget.min.js',
+        '//cdn.bootcss.com/jquery.iframe-transport/1.0.1/jquery.iframe-transport.min.js',
+        '//cdn.bootcss.com/blueimp-file-upload/9.17.0/js/jquery.fileupload.min.js',
+        '//cdn.bootcss.com/summernote/0.8.2/summernote.min.js',
+    ),
+    'default_css_for_inplace': (
+        '//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css',
+        '//cdn.bootcss.com/summernote/0.8.2/summernote.css',
+        os.path.join(STATIC_URL, 'django_summernote/django_summernote_inplace.css'),
+    ),
+    'default_js_for_inplace': (
+        '//cdn.bootcss.com/jquery/1.12.4/jquery.min.js',
+        '//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js',
+        '//cdn.bootcss.com/jqueryui/1.10.4/jquery.ui.widget.min.js',
+        '//cdn.bootcss.com/jquery.iframe-transport/1.0.1/jquery.iframe-transport.min.js',
+        '//cdn.bootcss.com/blueimp-file-upload/9.17.0/js/jquery.fileupload.min.js',
+        '//cdn.bootcss.com/summernote/0.8.2/summernote.min.js',
+    ),
+    'codemirror': {'theme': 'monokai',},
+}
 
 #自定义用户模型
 AUTH_USER_MODEL = 'user.User'

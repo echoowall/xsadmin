@@ -29,7 +29,7 @@ a:focus,
 input:focus {
 	text-decoration:none;
 	outline: none;
-	color:#02743a;
+	color: #266aa2;
 }
 
 img {
@@ -880,9 +880,12 @@ height:100%;
 }
 #main-footer{
 	position: relative;
-	background: #333;
+	background: #eee;
+    color: #666;
     margin-top: -60px;
     height: 60px;
+	line-height:60px;
+	text-align: center;
     clear:both;
 }
 .clearfix:after {content: ".";

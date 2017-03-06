@@ -16,14 +16,17 @@ Including another URLconf
 from django.conf.urls import url,include
 from django.contrib import admin
 from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^summernote/', include('django_summernote.urls')),
     url(r'^user/', include('user.urls',namespace='user')),
 
     url(r'', include('home.urls',namespace='home')),
 ]
 
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     import debug_toolbar
