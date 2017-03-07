@@ -110,6 +110,7 @@ class Node(models.Model):
     obfs_param = models.CharField(max_length=63,verbose_name='混淆插件参数',blank=True,default='')
 
     ssh_port = models.PositiveSmallIntegerField(verbose_name='SSH端口号',default=22)
+    last_api_request_time = models.DateTimeField(auto_now_add=True, verbose_name='最后调用远程API的时间')
 
     #api_key = models.CharField(verbose_name='API Key',unique=True,max_length=127,default=utils.gen_api_key, editable=False)
     api_secret = models.CharField(max_length=255,verbose_name='API Secret 密匙',default=utils.gen_api_secret)
@@ -196,6 +197,7 @@ class Post(models.Model):
     content_type = models.CharField('内容类型', max_length=31, choices=(('ANNOUNCE', '站内通告'), ('PAGE','页面'), ('OTHER', '其他类型')), default= 'ANNOUNCE')
     abstract = models.CharField('摘要', max_length=63, blank=True, null=True, help_text="可选，如若为空将摘取正文的前54个字符")
     topped = models.BooleanField('置顶', default=False)
+    create_user = models.ForeignKey(User, null=True, verbose_name='创建者', on_delete=models.SET_NULL)
 
     def __str__(self):
         return '%s [%s]'%(self.title, self.get_status_display())
@@ -218,3 +220,16 @@ class Attachment(AbstractAttachment):
         verbose_name = '附件'
         verbose_name_plural = verbose_name
         ordering = ['-uploaded']
+
+#流量记录
+class TrafficRecord(models.Model):
+    u = models.BigIntegerField(verbose_name='上传流量', default=0)
+    d = models.BigIntegerField(verbose_name='下载流量', default=0)
+    create_time = models.DateTimeField(verbose_name='产生时间', auto_now_add=True)
+    rate = models.DecimalField(verbose_name='流量倍率', max_digits=8, decimal_places=2, default=1.00)
+    user = models.ForeignKey(User, null=True, verbose_name='所属者', on_delete=models.CASCADE)
+    node = models.ForeignKey(Node, null=True, verbose_name='所属节点', on_delete=models.CASCADE)
+    class Meta:
+        verbose_name = '流量记录'
+        verbose_name_plural = verbose_name
+        ordering = ['-create_time']
