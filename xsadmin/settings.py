@@ -188,6 +188,12 @@ AUTHENTICATION_BACKENDS = (
     'home.authentication.EmailUsernameAuthBackend',
 )
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAdminUser',
+    )
+}
+
 CRISPY_TEMPLATE_PACK  =  'bootstrap3'
 LOGIN_REDIRECT_URL = '/user/'
 LOGIN_URL = '/login/'
