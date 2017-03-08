@@ -11,6 +11,8 @@ from rest_framework import status,permissions
 from django.http import Http404,HttpResponseForbidden
 from .permissions import *
 from .auth import *
+from django.core.cache import cache
+from api.tasks import update_users_transfer
 
 class UserPortView(APIView):
     permission_classes = ( )
@@ -25,10 +27,11 @@ class UserPortView(APIView):
         :return:
         '''
         data = request.data
-        for key, value in data.items():
-            print("端口[%s]上传了(%s)，下载了(%s)" %(key, value[0], value[1]))
+        update_users_transfer.delay(data)
+        user_ports_data = cache.get('user_ports_data')
 
-        user_ports = User.objects.filter(transfer_enable__gt=F('u')+F('d'), switch=True, is_active=True).values_list('port', 'passwd')
-        #serializer = UserPortSerializer(user_ports, many=True)
-        #return Response(serializer.data)
-        return Response(user_ports)
+        if user_ports_data is None:
+            user_ports_data = User.objects.filter(transfer_enable__gt=F('u')+F('d'), switch=True, is_active=True).values_list('port', 'passwd')
+            user_ports_data = list(user_ports_data)
+            cache.set('user_ports_data', user_ports_data, timeout= 100)
+        return Response(user_ports_data)

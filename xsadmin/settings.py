@@ -35,7 +35,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     'django_summernote',
     'rest_framework',
-    'djcelery',
+    'django_celery_beat',
+    'django_celery_results',
     'home',
     'user',
     'api',
@@ -202,6 +203,9 @@ LOGIN_URL = '/login/'
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
+
+#CELERY_RESULT_BACKEND = 'django-cache'
+CELERY_RESULT_BACKEND = 'django-db'
 
 PROJECT_CONFIG = {
     'PROJECT_NAME':'xsadmin',
