@@ -23,6 +23,19 @@ DATABASES = {
         'PORT':'3306'
     }
 }
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+BROKER_URL = 'redis://127.0.0.1:6379/0'
+BROKER_TRANSPORT = 'redis'
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
 
 STATIC_ROOT = "/var/www/example.com/static/"
 
@@ -34,3 +47,9 @@ SITE_CONFIG = {
 #极验证
 GEE_CAPTCHA_ID = 'b46d1900d0a894591916ea94ea91bd2c'
 GEE_PRIVATE_KEY = '36fc3fe98530eea08dfc6ce76e3d24c4'
+
+# import django
+# django.setup()
+#import djcelery
+#djcelery.setup_loader()
+

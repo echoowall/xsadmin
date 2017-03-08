@@ -13,17 +13,22 @@ from .permissions import *
 from .auth import *
 
 class UserPortView(APIView):
-    permission_classes = (IsSuperUser, )
+    permission_classes = ( )
 
-    authentication_classes = (MyAPISignatureAuthentication, )
+    authentication_classes = (SignatureAuthentication, )
 
-    def get(self, request, format=None):
+    def post(self, request, format=None):
         '''
         用户端口
         :param request:请求对象
         :param format:格式化
         :return:
         '''
-        user_ports = User.objects.filter(transfer_enable__gt=F('u')+F('d'), switch=True, is_active=True).values('port', 'passwd')
-        serializer = UserPortSerializer(user_ports, many=True)
-        return Response(serializer.data)
+        data = request.data
+        for key, value in data.items():
+            print("端口[%s]上传了(%s)，下载了(%s)" %(key, value[0], value[1]))
+
+        user_ports = User.objects.filter(transfer_enable__gt=F('u')+F('d'), switch=True, is_active=True).values_list('port', 'passwd')
+        #serializer = UserPortSerializer(user_ports, many=True)
+        #return Response(serializer.data)
+        return Response(user_ports)

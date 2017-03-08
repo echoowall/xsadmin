@@ -35,8 +35,10 @@ INSTALLED_APPS = [
     'crispy_forms',
     'django_summernote',
     'rest_framework',
+    'djcelery',
     'home',
     'user',
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -197,6 +199,9 @@ REST_FRAMEWORK = {
 CRISPY_TEMPLATE_PACK  =  'bootstrap3'
 LOGIN_REDIRECT_URL = '/user/'
 LOGIN_URL = '/login/'
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
 
 PROJECT_CONFIG = {
     'PROJECT_NAME':'xsadmin',
