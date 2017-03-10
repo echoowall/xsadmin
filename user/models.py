@@ -87,7 +87,7 @@ class Node(models.Model):
     method = models.CharField(choices=METHOD_CHOICES,max_length=63, default='chacha20', verbose_name='节点加密方式')
     info = models.TextField(max_length=255, verbose_name='节点信息')
     status = models.CharField(max_length=63, choices=STATUS_CHOICES,default='INIT', verbose_name='节点状态')
-    traffic_rate = models.DecimalField(verbose_name='流量倍率', max_digits=8, decimal_places=2, default=1.00)
+    traffic_rate = models.PositiveIntegerField(verbose_name='流量倍率百分比',help_text='100表示默认1倍', default=100)
     sort = models.SmallIntegerField(verbose_name='排序', default=0, help_text='小的在前面')
     tags = models.ManyToManyField('NodeTag', verbose_name='标签集合', blank=True)
 
@@ -232,8 +232,8 @@ class TrafficRecord(models.Model):
     u = models.BigIntegerField(verbose_name='上传流量', default=0)
     d = models.BigIntegerField(verbose_name='下载流量', default=0)
     create_time = models.DateTimeField(verbose_name='产生时间', auto_now_add=True)
-    rate = models.DecimalField(verbose_name='流量倍率', max_digits=8, decimal_places=2, default=1.00)
-    user = models.ForeignKey(User, null=True, verbose_name='所属者', on_delete=models.CASCADE)
+    rate = models.PositiveIntegerField(verbose_name='流量倍率百分比',help_text='100表示默认1倍', default=100)
+    port = models.PositiveSmallIntegerField(verbose_name='端口', blank=True, default=None)
     node = models.ForeignKey(Node, null=True, verbose_name='所属节点', on_delete=models.CASCADE)
     class Meta:
         verbose_name = '流量记录'

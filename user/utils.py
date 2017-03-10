@@ -36,6 +36,8 @@ def gen_invite_code():
     return md5(uuid.uuid4().__str__())
 
 def refush_node_app_keyset(node_cls = None):
+    '''更新缓存中的app_key,app_secret集合
+    '''
     try:
         if not node_cls:
             from .models import Node

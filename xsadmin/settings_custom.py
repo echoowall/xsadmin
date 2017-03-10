@@ -44,6 +44,7 @@ SITE_CONFIG = {
     'SITE_NAME':'XS Admin',
     'SITE_DESC':'One powerful tool...',
 }
+USER_PORTS_CACHE_TIME = 30
 
 #极验证
 GEE_CAPTCHA_ID = 'b46d1900d0a894591916ea94ea91bd2c'

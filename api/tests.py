@@ -5,6 +5,7 @@ import re
 from datetime import datetime
 
 def test():
+    '''
     restr = re.compile(r'^([0-9a-zA-Z]+)\|([0-9a-zA-Z]+)\|([0-9a-zA-Z]+)\|([\d]+)$')
 
     match = restr.search('ai9jhklfai9ioj2as890dfh|90fualksdjfo89uq2kef|290fujaklsdf099u12fklja|19871892341')
@@ -26,6 +27,13 @@ def test():
     print(date1)
     date_delay = now - date1
     print(date_delay,type(date_delay),date_delay.seconds)
+    '''
+
+    from decimal import Decimal
+
+    a = Decimal('1.00')
+    print(int(a*0))
+    print(a.to_integral)
 
 
 if __name__ == '__main__':
