@@ -1,0 +1,1 @@
+python manage_dev.py runserver 192.168.33.10:8000

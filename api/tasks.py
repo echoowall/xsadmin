@@ -32,5 +32,10 @@ def update_users_transfer(list):
         except (User.DoesNotExist,User.MultipleObjectsReturned):
             pass
 
+@shared_task(name='打印日志')
+def logging_info(arg):
+    logging.info(arg)
 
-
+@periodic_task(name='打印日志任务', run_every= crontab(hour="*", minute="*", day_of_month="*"))
+def logging_info_task():
+    logging.info('我是打印日志任务')

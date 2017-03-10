@@ -110,7 +110,7 @@ class NodeQrInfoView(LoginRequiredMixin, DetailView):
     http_method_names = ['post']
 
     def get_object(self, queryset=None):
-        node = get_object_or_404(Node, ~Q(status__iexact='OUT'), pk= self.request.POST.get('pk',''))
+        node = get_object_or_404(Node, ~Q(status__iexact='OUT'), slug= self.request.POST.get('slug',''))
         node.passwd = self.request.user.passwd
         node.port = self.request.user.port
         return node

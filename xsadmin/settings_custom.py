@@ -10,7 +10,7 @@
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '05bk@wyb%nm2-=59n08-mu@^t7+#%x$^kk8_%pm_wcnq6ga!2='
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ('127.0.0.1', '192.168.33.10',)
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 DATABASES = {
@@ -33,9 +33,10 @@ CACHES = {
     }
 }
 
-BROKER_URL = 'redis://127.0.0.1:6379/0'
-BROKER_TRANSPORT = 'redis'
-CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+CELERY_BROKER_TRANSPORT = 'redis'
+CELERY_BROKER_URL = 'redis://:password@127.0.0.1:6379/1'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
 
 STATIC_ROOT = "/var/www/example.com/static/"
 

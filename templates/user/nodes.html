@@ -32,7 +32,7 @@
                         </div><!-- ad-meta -->
                     </div><!-- ad-info -->
                     <div class="button">
-                        <a href="javascript:showQrCode('{{ node.pk }}')"><i class="fa fa-qrcode icon-xs icon-accent animated bounceIn"></i> 节点连接信息</a>　
+                        <a href="javascript:showQrCode('{{ node.slug }}')"><i class="fa fa-qrcode icon-xs icon-accent animated bounceIn"></i> 节点连接信息</a>　
                         <a href="javascript:void(0)"><i class="fa fa-cloud icon-xs icon-success animated rotateIn"></i> 详细信息</a>
                     </div>
                 </div><!-- item-info -->
@@ -71,11 +71,11 @@
 {% block js %}
     <script src="//cdn.bootcss.com/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
     <script type="text/javascript">
-        function showQrCode(pk) {
+        function showQrCode(slug) {
             $('#cmpltadminModal-qrcode .loader').show();
             $("#qrcode-ajax-content").html('');
             $('#cmpltadminModal-qrcode').modal('show',{backdrop:"static"});
-            $.post('{% url "user:node_qr_info" %}',{'csrfmiddlewaretoken':'{{ csrf_token }}','pk':pk},function(data){
+            $.post('{% url "user:node_qr_info" %}',{'csrfmiddlewaretoken':'{{ csrf_token }}','slug':slug},function(data){
                 $('#cmpltadminModal-qrcode .loader').hide();
                 $("#qrcode-ajax-content").html(data);
             },'html');

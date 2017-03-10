@@ -1,0 +1,1 @@
+celery -A xsadmin worker -l info

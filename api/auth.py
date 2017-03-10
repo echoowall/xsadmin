@@ -9,17 +9,16 @@ from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed, NotAuthenticated
 import re, hashlib
 from datetime import datetime
+from django.core.cache import cache
+from user.utils import refush_node_app_keyset
+import logging
+
+logger = logging.getLogger('xsadminloger')
 
 class SignatureAuthentication(BaseAuthentication):
 
     SIGNATURE_RE = re.compile(r'^([0-9a-zA-Z]+)\|([0-9a-zA-Z]+)\|([0-9a-zA-Z]+)\|([\d]+)$')
     # ${"JbTm7Y01CeuJxsCO|1234|".concat("JbTm7Y01CeuJxsCO|1234|ViDZmnEO4Q8LCRaR|".concat(timestamp().substring(0, 10)).md5()).concat('|').concat(timestamp().substring(0, 10))}
-
-
-    KEY_SET = {
-        'JbTm7Y01CeuJxsCO': 'ViDZmnEO4Q8LCRaR',
-        'nLTqoBUos0USoBrP': 'OiWQWCR08v0ay3PL'
-               }
 
     def authenticate(self, request):
         auth = request.META.get('HTTP_AUTHORIZATION', '').strip()  #  {api_key}|{nonce_str}|{signature}|{timestamp}
@@ -38,12 +37,26 @@ class SignatureAuthentication(BaseAuthentication):
             raise AuthenticationFailed('timestamp is invalid')
         if abs(time_delay.seconds) > 60*30:
             raise AuthenticationFailed('request is out of time')
-        api_secret = self.KEY_SET.get(api_key)
-        if not api_key:
+        node_set = cache.get('node_api_key_set')
+        if not node_set:
+            #raise AuthenticationFailed('Api key is not set,please notice the admin')
+            logger.error('cache do not has node_set, refush_node_app_keyset it')
+            node_set = refush_node_app_keyset()
+        api_key_value = node_set.get(api_key)
+        if not api_key_value:
             raise AuthenticationFailed('Api key is error')
+        api_secret = api_key_value[0]
+        if not api_secret:
+            raise AuthenticationFailed('Api secret is not set,please notice the admin')
         signature_byserver = self.signature_params(api_key, nonce_str, api_secret, timestamp)
         if signature_byserver != signature:
             raise AuthenticationFailed('Signature is error')
+        node_id = api_key_value[1]
+        node_rate = api_key_value[2]
+        if not node_id or not node_rate:
+            raise AuthenticationFailed('no node_id or node_rate,please notice the admin')
+        request.node_id = node_id
+        request.node_rate = node_rate
         return None
 
     def signature_params(self, api_key, nonce_str, api_secret, timestamp):

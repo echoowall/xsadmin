@@ -9,9 +9,15 @@ import random, base64
 from django.core import validators
 from django.urls import reverse
 from django_summernote.models import AbstractAttachment
+from django.db.utils import ProgrammingError
 
 def get_usefull_port():
-    max_port = User.objects.aggregate(Max('port')).get('port__max', 13215)
+    try:
+        max_port = User.objects.aggregate(Max('port')).get('port__max')
+    except ProgrammingError:
+        max_port = None
+    if not max_port:
+        max_port = 17236
     new_port = int(max_port) + random.randint(2, 5)
     return new_port
 
@@ -74,7 +80,6 @@ class Node(models.Model):
         ('MAINTAIN','维护中'),
         ('OUT','下线'),
     )
-    id = models.CharField(max_length=63, verbose_name='主键、API Key', primary_key=True, default=utils.gen_api_key, editable=False)
     name = models.CharField(max_length=63,verbose_name='节点名称')
     location = models.CharField(max_length=127, verbose_name='节点位置')
     ip = models.GenericIPAddressField(verbose_name='节点IP地址',protocol='IPv4')
@@ -112,7 +117,8 @@ class Node(models.Model):
     ssh_port = models.PositiveSmallIntegerField(verbose_name='SSH端口号',default=22)
     last_api_request_time = models.DateTimeField(auto_now_add=True, verbose_name='最后调用远程API的时间')
 
-    #api_key = models.CharField(verbose_name='API Key',unique=True,max_length=127,default=utils.gen_api_key, editable=False)
+    slug = models.CharField(verbose_name='API Key',unique=True, db_index=True, max_length=127, default=utils.gen_api_key, editable=False)
+    api_key = models.CharField(verbose_name='API Key',unique=True,max_length=127,default=utils.gen_api_key, editable=False)
     api_secret = models.CharField(max_length=255,verbose_name='API Secret 密匙',default=utils.gen_api_secret)
 
     class Meta:
