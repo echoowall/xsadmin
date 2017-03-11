@@ -17,12 +17,14 @@ from django.conf.urls import url,include
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
+from home.views import MyRecover
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^summernote/', include('django_summernote.urls')),
     url(r'^user/', include('user.urls',namespace='user')),
     url(r'^api/', include('api.urls', namespace='api')),
+    url(r'^pwd/recover/$', MyRecover.as_view(), name='password_reset_recover'),
     url(r'^pwd/', include('password_reset.urls')),
     url(r'', include('home.urls',namespace='home')),
 ]

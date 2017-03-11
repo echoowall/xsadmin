@@ -21,14 +21,19 @@
             {% elif unable_checkin_reason %}
                 {{ unable_checkin_reason }} <i class="fa fa-info"></i>
             {% else %}
-                今日已签到 <i class="fa fa-check-circle"></i>
+                今日已签到 <i class="fa fa-check-circle icon-lg icon-success animated bounceIn"></i>
             {% endif %}
         </div>
         <div class="col-md-6">
-            签到信息
             <p>
                 最后签到时间：{{ user.last_check_in_time }}，您已连续签到{{ user.check_in_count }}天
             </p>
+            <p>近一周签到记录：</p>
+            <ul>
+                {% for info in check_in_list %}
+                <li>{{ info.create_time }} {{ info.remark }}</li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 

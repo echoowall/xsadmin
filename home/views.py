@@ -6,7 +6,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from .forms import *
 from django.conf import settings
-import datetime
+from django.utils import timezone
+from datetime import timedelta
 from . import utils
 from django.http import HttpResponse,HttpResponseForbidden
 from geetest import GeetestLib
@@ -14,6 +15,8 @@ from django.core.exceptions import PermissionDenied
 from user import utils as UserUtils
 from user.models import Post
 from django.http.response import Http404
+from django.db.models import Q
+from password_reset.views import Recover
 
 # Create your views here.
 
@@ -85,7 +88,7 @@ class RegisterView(AuthedRedirectMixin, GeeCaptchaValidateMixin, FormView):
         #验证无误，注册用户，废除邀请码
         code = InviteCode.objects.get(code__exact=form.cleaned_data.get('invite_code'))
         ip = utils.get_remote_ip(self.request)
-        now = datetime.datetime.now()
+        now = timezone.now()
         extra_fields = {
             'transfer_enable': code.traffic,
             'reg_ip': ip,
@@ -120,9 +123,19 @@ class GeeCaptchaView(View):
 class InviteCodeView(TemplateView):
     template_name = 'home/code.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        now = timezone.now()
+        delay = timedelta(minutes=10)
+        context['codes'] = InviteCode.objects.filter(
+            (Q(type=InviteCode.TYPE_DEFAULT)|
+             (Q(type=InviteCode.TYPE_TIMING)&Q(show_time__gte=now))
+             )&(Q(enable=True)|Q(used_time=None)|Q(used_time__range=(now-delay,now+delay))))
+        return context
+
 class PostPageView(TemplateView):
 
-    page_temp_list = ('index', 'about', 'download', 'faq', 'tos')
+    page_temp_list = ('index', 'about', 'download', 'tos')
     page = None
     default_slug = 'index'
     current_slug = default_slug
@@ -146,3 +159,7 @@ class PostPageView(TemplateView):
         except Post.DoesNotExist or Post.MultipleObjectsReturned:
             pass
         return context
+
+class MyRecover(GeeCaptchaValidateMixin, Recover):
+
+    pass

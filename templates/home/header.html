@@ -36,9 +36,6 @@
                         <li {% ifequal request.path about_url %}class="active"{% endifequal %}>
                             <a href="{{ about_url }}"><i class="fa fa-flag-checkered" aria-hidden="true"></i> 关于</a>
                         </li>
-                        <li {% ifequal request.path faq_url %}class="active"{% endifequal %}>
-                            <a href="{{ faq_url }}"><i class="fa fa-question-circle" aria-hidden="true"></i> 常见问题</a>
-                        </li>
                         <li {% ifequal request.path tos_url %}class="active"{% endifequal %}>
                             <a href="{{ tos_url }}"><i class="fa fa-book" aria-hidden="true"></i> 服务条款</a>
                         </li>

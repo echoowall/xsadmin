@@ -48,6 +48,7 @@
                                 <span class="input-group-addon "><i class="fa fa-plane"></i></span>
                                 {{ form.invite_code }}
                             </div>
+                            <a href="{% url 'home:invite_code' %}"><small for="">还没有邀请码？</small></a>
                             {% if form.invite_code.errors %}<label class="label-warning val-error">{{ form.invite_code.errors.0 }}</label>{% endif %}
                         </div>
                         <div style="margin: 12px 0 0 6px">

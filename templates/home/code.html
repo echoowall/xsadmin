@@ -2,6 +2,37 @@
 {% block title %}邀请码{% endblock %}
  
 {% block content %}
-
-邀请码页面
+<h2 class="page-header">
+    Invite Code <small>邀请码</small>
+</h2>
+<div class="row">
+    <div class="form-group" id="success-msg">
+        <div class="col-md-12">
+            <div class="alert alert-success alert-dismissable" style="margin-top: 12px">
+               <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+               <h5><i class="icon fa fa-check-circle-o"></i> 邀请码实时刷新，并不定期发放，请关注我们的网站</h5>
+             </div>
+        </div>
+    </div>
+</div>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>###</th>
+                    <th>邀请码</th>
+                    <th>状态</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for code in codes %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td><a href="{% url 'home:register' %}?invite_code={{ code.code }}">{{ code.code }}</a></td>
+                <td>{{ code.enable|yesno:"可用,no,失效"  }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

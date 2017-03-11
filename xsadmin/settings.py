@@ -229,19 +229,6 @@ LOGGING = {
         # INFO 2016-09-03 16:25:20,067 /home/ubuntu/mysite/views.py views.py views get 29: some info...
     },
     'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'class': 'django.utils.log.AdminEmailHandler',
-            'formatter':'standard'
-        },
-        'file_handler': {
-            'level':'DEBUG',
-            'class':'logging.handlers.RotatingFileHandler',
-            'filename': 'log/all.log',     #日志输出文件
-            'maxBytes': 1024*1024*5,                  #文件大小
-            'backupCount': 5,                         #备份份数
-            'formatter':'standard',                   #使用哪种formatters日志格式
-        },
         'console':{
             'level': 'INFO',
             'filters': ['require_debug_true'],
@@ -251,15 +238,10 @@ LOGGING = {
     },
     'loggers': {
         'django': {
-            'handlers' :['file_handler', 'console'],
+            'handlers' :['console'],
             'level':'DEBUG',
             'propagate': True # 是否继承父类的log信息
         }, # handlers 来自于上面的 handlers 定义的内容
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': False,
-        },
         'xsadminloger': {
             'handlers': ['console'],
             'level': 'DEBUG',

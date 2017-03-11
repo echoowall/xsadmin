@@ -16,6 +16,9 @@ from home import utils as home_utils
 from django.db import transaction
 
 
+TO_MB = 1048576
+TO_GB = 1073741824
+
 # Create your views here.
 
 class LogoutView(LoginRequiredMixin, View):
@@ -106,6 +109,8 @@ class CheckInView(LoginRequiredMixin, GeeCaptchaValidateMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context['user_checkable'] = self.check_user_checkable(self.request.user)
         context['unable_checkin_reason'] = self.unable_checkin_reason
+        context['check_in_list'] = ActionRecord.objects.filter(create_user=self.request.user,
+                                                               type='USER_CHECK_IN').order_by('-id')[:7]
         return context
 
     @transaction.atomic
@@ -115,14 +120,17 @@ class CheckInView(LoginRequiredMixin, GeeCaptchaValidateMixin, TemplateView):
             #进入签到逻辑
             now = timezone.now()
             yesterday_morning = timezone.make_aware(datetime(now.year, now.month, now.day-1))
-            if user.last_check_in_time < yesterday_morning:
+            if not user.last_check_in_time or user.last_check_in_time < yesterday_morning:
                 count = 1
             else:
                 count = user.check_in_count + 1
+            trans_gift = random.randint(10, 120)
             user.check_in_count = count
             user.last_check_in_time = now
+            user.transfer_enable = F('transfer_enable')+TO_MB*trans_gift
+            #赠送适当流量
             user.save()
-            ActionRecord(type='USER_CHECK_IN', meta="{'count':'%d'}" % count,
+            ActionRecord(type='USER_CHECK_IN', remark='您已连续签到%d天，获赠%dM流量'%(count,trans_gift), meta="{'count':'%d'}" % count,
                          create_user=user, ip=home_utils.get_remote_ip(request)).save()
         return HttpResponseRedirect(self.success_url)
 
