@@ -10,6 +10,9 @@ import uuid, hashlib, random
 from django.db.utils import ProgrammingError
 from django.core.cache import cache
 from django.db.models import Q
+from django.shortcuts import reverse
+from django.http import HttpRequest
+from django.utils.cache import get_cache_key
 import logging
 
 logger = logging.getLogger('xsadminloger')
@@ -52,6 +55,31 @@ def refush_node_app_keyset(node_cls = None):
     except ProgrammingError:
         return {}
 
+
+def expire_page_cache(viewname, curreq, args=None, key_prefix=None):
+    """
+    Removes cache created by cache_page functionality.
+    Parameters are used as they are in reverse()
+    """
+    if args is None:
+        path = reverse(viewname)
+    else:
+        path = reverse(viewname, args=args)
+
+    http_host = curreq.META.get("HTTP_HOST", "")
+    if len(http_host.split(":")) == 1:
+        server_name, server_port = http_host, "80"
+    else:
+        server_name, server_port = http_host.split(":")
+
+    request = HttpRequest()
+    request.META = {'SERVER_NAME': server_name, 'SERVER_PORT': server_port}
+    request.META.update(dict((header, value) for (header, value) in
+                             curreq.META.items() if header.startswith('HTTP_')))
+    request.path = path
+    key = get_cache_key(request, key_prefix=key_prefix)
+    if key and cache.get(key):
+        cache.set(key, None, 0)
 
 if __name__ == '__main__':
     print ('md5',md5('123'))

@@ -32,20 +32,21 @@ class AuthedRedirectMixin(object):
 
 class GeeCaptchaValidateMixin(object):
 
-    def post(self, request, *args, **kwargs):
-        gt = GeetestLib(settings.GEE_CAPTCHA_ID, settings.GEE_PRIVATE_KEY)
-        challenge = request.POST.get(gt.FN_CHALLENGE, '')
-        validate = request.POST.get(gt.FN_VALIDATE, '')
-        seccode = request.POST.get(gt.FN_SECCODE, '')
-        status = request.session.get(gt.GT_STATUS_SESSION_KEY)
-        user_id = request.session.get("gee_user_id")
-        if status:
-            result = gt.success_validate(challenge, validate, seccode, user_id)
-        else:
-            result = gt.failback_validate(challenge, validate, seccode)
-        if not result:
-            raise PermissionDenied('请正确滑动解锁')
-        return super().post(request, *args, **kwargs)
+    def dispatch(self, request, *args, **kwargs):
+        if request.method == "POST":
+            gt = GeetestLib(settings.GEE_CAPTCHA_ID, settings.GEE_PRIVATE_KEY)
+            challenge = request.POST.get(gt.FN_CHALLENGE, '')
+            validate = request.POST.get(gt.FN_VALIDATE, '')
+            seccode = request.POST.get(gt.FN_SECCODE, '')
+            status = request.session.get(gt.GT_STATUS_SESSION_KEY)
+            user_id = request.session.get("gee_user_id")
+            if status:
+                result = gt.success_validate(challenge, validate, seccode, user_id)
+            else:
+                result = gt.failback_validate(challenge, validate, seccode)
+            if not result:
+                raise PermissionDenied('请正确滑动解锁')
+        return super().dispatch(request, *args, **kwargs)
 
 
 

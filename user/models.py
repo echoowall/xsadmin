@@ -164,7 +164,7 @@ class InviteCode(models.Model):
 
     code = models.CharField(max_length=127,verbose_name='邀请码',default=utils.gen_invite_code,unique=True)
     create_time = models.DateTimeField(auto_now_add=True,verbose_name='创建时间')
-    used_time = models.DateTimeField(null=True,verbose_name='使用时间')
+    used_time = models.DateTimeField(null=True, blank=True, verbose_name='使用时间')
     TYPE_DEFAULT = 'DEFAULT'
     TYPE_TIMING = 'TIMING'
     TYPE_USERS = 'USERS'
@@ -174,10 +174,10 @@ class InviteCode(models.Model):
         (TYPE_USERS,'用户生成类型'),
     )
     type = models.CharField(max_length=15,verbose_name='邀请码类型',default=TYPE_DEFAULT,choices=TCHOICES)
-    show_time = models.DateTimeField(null=True,verbose_name='公开显示时间')
+    show_time = models.DateTimeField(null=True, blank=True, verbose_name='公开显示时间')
 
-    create_user = models.ForeignKey(User,null=True,verbose_name='创建者',on_delete=models.SET_NULL,related_name='created_code_set')
-    used_user = models.ForeignKey(User,null=True,verbose_name='使用者',on_delete=models.SET_NULL,related_name='used_code_set')
+    create_user = models.ForeignKey(User,null=True, editable=False, verbose_name='创建者',on_delete=models.SET_NULL,related_name='created_code_set')
+    used_user = models.ForeignKey(User,null=True, blank=True, verbose_name='使用者',on_delete=models.SET_NULL,related_name='used_code_set')
 
     traffic = models.BigIntegerField(verbose_name='流量',default=0)
     enable = models.BooleanField(verbose_name='是否可用',default=True)
@@ -203,7 +203,7 @@ class Post(models.Model):
     content_type = models.CharField('内容类型', max_length=31, choices=(('ANNOUNCE', '站内通告'), ('PAGE','页面'), ('OTHER', '其他类型')), default= 'ANNOUNCE')
     abstract = models.CharField('摘要', max_length=63, blank=True, null=True, help_text="可选，如若为空将摘取正文的前54个字符")
     topped = models.BooleanField('置顶', default=False)
-    create_user = models.ForeignKey(User, null=True, verbose_name='创建者', on_delete=models.SET_NULL)
+    create_user = models.ForeignKey(User, null=True, editable=False, verbose_name='创建者', on_delete=models.SET_NULL)
 
     def __str__(self):
         return '%s [%s]'%(self.title, self.get_status_display())
@@ -237,5 +237,19 @@ class TrafficRecord(models.Model):
     node = models.ForeignKey(Node, null=True, verbose_name='所属节点', on_delete=models.CASCADE)
     class Meta:
         verbose_name = '流量记录'
+        verbose_name_plural = verbose_name
+        ordering = ['-create_time']
+
+#用户动作记录
+class ActionRecord(models.Model):
+    type = models.CharField(verbose_name='行为类型', max_length=63)
+    remark = models.TextField(verbose_name='行为备注', null=True)
+    meta = models.CharField(verbose_name='一些信息', max_length=1023, null=True)
+    create_time = models.DateTimeField(verbose_name='产生时间', auto_now_add=True)
+    create_user = models.ForeignKey(User, null=True, editable=False, verbose_name='创建者', on_delete=models.SET_NULL)
+    ip = models.CharField(verbose_name='ip地址', null=True, max_length=255)
+
+    class Meta:
+        verbose_name = '用户动作记录'
         verbose_name_plural = verbose_name
         ordering = ['-create_time']

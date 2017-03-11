@@ -18,6 +18,7 @@ urlpatterns = [
     url(r'^(index/|dashboard/)?$', DashboardView.as_view(),name='dashboard'),
     url(r'^profile/$', ProfileView.as_view(), name='profile'),
     url(r'^passwd/$', PasswdView.as_view(), name='passwd'),
+    url(r'^checkin/$', CheckInView.as_view(), name='checkin'),
     url(r'^password/$', PasswordView.as_view(), name='password'),
     url(r'^nodes/(?P<tag_slug>[\w-]+)?$', NodeListView.as_view(), name='nodes'),
     url(r'^node_qr_info/$', NodeQrInfoView.as_view(), name= 'node_qr_info'),
@@ -32,6 +33,7 @@ menus = (
         {'title': '安全设置', 'title_en': 'Safe Setting', 'icon': 'user-secret', 'url_name': 'user:password'},
         {'title': '连接设置', 'title_en': 'Connection Setting', 'icon': 'connectdevelop', 'url_name': 'user:passwd'},
     )},
+   {'title': '每日签到', 'title_en': 'Check In', 'icon': 'flag-checkered', 'url_name': 'user:checkin', 'children': ()},
     {'title': '节点中心', 'title_en': 'Node Center', 'icon': 'codepen', 'url_name': 'user:nodes', 'children': ()},
     {'title': '站内通告', 'title_en': 'Site Notice', 'icon': 'comment', 'url_name': 'user:posts', 'children': (
         {'title': '通告详情', 'title_en': 'Notice Detail', 'icon': 'comment', 'url_name': 'user:post_detail', 'no_reverse': True},

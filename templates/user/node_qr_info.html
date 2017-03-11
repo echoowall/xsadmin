@@ -19,6 +19,9 @@
   <p>连接字符串：<code>{{ node.ss_url }}</code></p>
   <p>Base64加密：<code>{{ node.ss_qrcode }}</code></p>
   <p>配置文件：<code>{"server":"{{ node.ip }}", "server_port":{{ node.port }}, "local_port":1080, "password":"{{ node.passwd }}", "timeout":600, "method":"{{ node.method }}","remarks":"{{ node.name }}"}</code></p>
+  <p>协议插件/参数：<code>{{ node.protocol }}</code>/<code>{{ node.protocol_param }}</code></p>
+    <p>混淆插件/参数：<code>{{ node.obfs }}</code>/<code>{{ node.obfs_param }}</code></p>
+    {% if node.ipv6 %}<p>IPv6地址：<code>{{ node.ipv6 }}</code></p>{% endif %}
 </div>
 <script>
 	jQuery(function(){

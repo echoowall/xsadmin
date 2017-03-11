@@ -6,7 +6,14 @@ from django.shortcuts import redirect,get_object_or_404
 from .models import *
 from .forms import *
 from django.core.urlresolvers import reverse,reverse_lazy
-from django.db.models import Q
+from django.db.models import Q, F
+from django.http import HttpResponseRedirect
+
+from home.views import GeeCaptchaValidateMixin
+from django.utils import timezone
+from datetime import datetime
+from home import utils as home_utils
+from django.db import transaction
 
 
 # Create your views here.
@@ -80,6 +87,46 @@ class PasswordView(LoginRequiredMixin, UpdateView):
         update_session_auth_hash(request=self.request, user=form.instance)
         return response
 
+class CheckInView(LoginRequiredMixin, GeeCaptchaValidateMixin, TemplateView):
+    template_name = 'user/checkin.html'
+    success_url = reverse_lazy('user:checkin')
+    unable_checkin_reason = None
+
+    def check_user_checkable(self, user):
+        if not user.is_active or user.switch == 0:
+            self.unable_checkin_reason = '用户被禁用，暂时无法签到'
+            return False
+        last_check_in_time = user.last_check_in_time
+        if last_check_in_time:
+            now = timezone.now()
+            return now.strftime('%Y-%m-%d') != last_check_in_time.strftime('%Y-%m-%d')
+        return True
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user_checkable'] = self.check_user_checkable(self.request.user)
+        context['unable_checkin_reason'] = self.unable_checkin_reason
+        return context
+
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        if self.check_user_checkable(user):
+            #进入签到逻辑
+            now = timezone.now()
+            yesterday_morning = timezone.make_aware(datetime(now.year, now.month, now.day-1))
+            if user.last_check_in_time < yesterday_morning:
+                count = 1
+            else:
+                count = user.check_in_count + 1
+            user.check_in_count = count
+            user.last_check_in_time = now
+            user.save()
+            ActionRecord(type='USER_CHECK_IN', meta="{'count':'%d'}" % count,
+                         create_user=user, ip=home_utils.get_remote_ip(request)).save()
+        return HttpResponseRedirect(self.success_url)
+
+
 class BindEmailView(LoginRequiredMixin, UpdateView):
     pass
 
@@ -93,6 +140,8 @@ class NodeListView(LoginRequiredMixin, ListView):
         tag_slug = self.kwargs.get('tag_slug')
         if tag_slug:
             context['node_tag'] = get_object_or_404(NodeTag, slug= tag_slug)
+        else:
+            context['node_tag'] = None
         return context
 
     def get_queryset(self):

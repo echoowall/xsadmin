@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_celery_beat',
     'django_celery_results',
+    'password_reset',
     'home',
     'user.apps.UserConfig',
     'api.apps.ApiConfig',

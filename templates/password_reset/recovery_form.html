@@ -1,0 +1,79 @@
+{% extends "password_reset/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Password recovery" %}{% endblock %}
+{% block content %}
+    <div class="eternity-form container">
+    <div class="forgot-password-section" data-animation="bounceInLeft">
+        <div class="section-title">
+            <h3>找回密码</h3>
+        </div>
+        <div class="forgot-content">
+            <form method="post" action="{{ url }}">
+                {% csrf_token %}
+                <div class="textbox-wrap">
+                    <div class="input-group">
+                        <span class="input-group-addon "><i class="fa fa-user"></i></span>
+                        <input type="text" class="form-control " placeholder="用户名" required="required" />
+                    </div>
+                </div>
+                <div class="textbox-wrap">
+                    <div class="input-group">
+                        <span class="input-group-addon "><i class="fa fa-envelope"></i></span>
+                        <input type="email" class="form-control " placeholder="Email" required="required" />
+                    </div>
+                </div>
+                <div style="margin: 12px 0px 10px 32px">
+                   <div id="embed-captcha"></div>
+                    <p id="wait" class="show">正在加载验证码......</p>
+                    <p id="notice" class="hide">请先拖动验证码到相应位置</p>
+                </div>
+                <div class="forget-form-action clearfix">
+                    <a class="btn btn-success pull-left blue-btn" href="{% url 'home:login' %}"><i class="fa fa-chevron-left"></i>&nbsp;&nbsp;返回登录  </a>
+                    <button type="submit" id="embed-submit" class="btn btn-success pull-right green-btn">{% trans "Recover my password" %} &nbsp;&nbsp;
+                        <i class="fa fa-chevron-right"></i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+    <script src="//cdn.bootcss.com/jquery-placeholder/2.3.1/jquery.placeholder.min.js"></script>
+    <script src="//static.geetest.com/static/tools/gt.js"></script>
+    <script type="text/javascript">
+        var handlerEmbed = function (captchaObj) {
+            $("#embed-submit").click(function (e) {
+                var validate = captchaObj.getValidate();
+                if (!validate) {
+                    $("#notice")[0].className = "show";
+                    setTimeout(function () {
+                        $("#notice")[0].className = "hide";
+                    }, 2000);
+                    e.preventDefault();
+                }
+            });
+            // 将验证码加到id为captcha的元素里
+            captchaObj.appendTo("#embed-captcha");
+            captchaObj.onReady(function () {
+                $("#wait")[0].className = "hide";
+            });
+        };
+        $.post('{% url 'home:get_gee_captcha' %}?t='+ (new Date()).getTime(),
+            {'csrfmiddlewaretoken':'{{ csrf_token }}'},
+            function(data){
+                initGeetest({
+                gt: data.gt,
+                challenge: data.challenge,
+                product: "float", // 产品形式，包括：float，embed，popup。注意只对PC版验证码有效
+                offline: !data.success // 表示用户后台检测极验服务器是否宕机，一般不需要关注
+            }, handlerEmbed);
+        });
+        $(function () {
+            $(".form-control").focus(function () {
+                $(this).closest(".textbox-wrap").addClass("focused");
+            }).blur(function () {
+                $(this).closest(".textbox-wrap").removeClass("focused");
+            });
+        });
+    </script>
+{% endblock %}

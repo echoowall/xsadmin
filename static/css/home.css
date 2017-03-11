@@ -876,7 +876,7 @@ height:100%;
 	margin-bottom:-60px;/*向上缩减80像素，不至于footer超出屏幕可视范围*/
 }
 #content-real-content{
-	padding-bottom:60px; /*这个是关键，处理页面高度超出屏幕可视范围时，控制内容和底部高度之间距离*/
+	padding-bottom:80px; /*这个是关键，处理页面高度超出屏幕可视范围时，控制内容和底部高度之间距离*/
 }
 #main-footer{
 	position: relative;

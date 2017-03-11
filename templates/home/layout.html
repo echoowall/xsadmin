@@ -20,7 +20,10 @@
 <div id="content-wrap">
 <div id="content-real-content">
 {% include './header.html' %}
-{% block content %}{% endblock %}
+    <div class="container">
+        <div class="col-md-12">{% block content %}{% endblock %}</div>
+    </div>
+    {% block content_full %}{% endblock %}
 </div>
 </div>
 {% include './footer.html' %}

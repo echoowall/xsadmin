@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^summernote/', include('django_summernote.urls')),
     url(r'^user/', include('user.urls',namespace='user')),
     url(r'^api/', include('api.urls', namespace='api')),
+    url(r'^pwd/', include('password_reset.urls')),
     url(r'', include('home.urls',namespace='home')),
 ]
 
