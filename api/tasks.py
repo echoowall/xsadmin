@@ -30,10 +30,13 @@ def reset_all_users_transfer():
     traffic_list = TrafficRecord.objects.filter(create_date=yesterday).values('port', 'node_id')\
         .annotate(sum_u=Sum(F('u') * F('rate') / 100, output_field=fields.IntegerField()),
         sum_d=Sum(F('d') * F('rate') / 100, output_field=fields.IntegerField())).order_by()
+    tr_list = list()
     for traf in traffic_list:
         #print(traf)
-        TrafficRecord(u=traf['sum_u'], d=traf['sum_d'], type=1, port=traf['port'], summary_date=yesterday,
-                      node_id=traf['node_id']).save()
+        tr = TrafficRecord(u=traf['sum_u'], d=traf['sum_d'], type=1, port=traf['port'],
+                           summary_date=yesterday, node_id=traf['node_id'])
+        tr_list.append(tr)
+    TrafficRecord.objects.bulk_create(tr_list)
     # 2.删除7天前的流量记录，防止表数据过大
     TrafficRecord.objects.filter(summary_date__lte=timezone.now() - timedelta(days=7)).delete()
 
