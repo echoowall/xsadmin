@@ -87,3 +87,9 @@ class PasswordForm(ModelForm):
         user.set_password(self.cleaned_data['password'])
         user.save()
         return user
+
+class InviteCodeForm(ModelForm):
+    count = fields.IntegerField(required=True, label='生成个数',min_value=1, max_value=200, help_text='批量生成邀请码，最多一次生成200个')
+    class Meta:
+        model = InviteCode
+        exclude = ('used_user',)

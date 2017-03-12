@@ -1,0 +1,71 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls %}
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+&rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+&rsaquo; <a href="{% url opts|admin_urlname:'changelist' %}">节点</a>
+&rsaquo; <a href="{% url opts|admin_urlname:'change' node.pk|admin_urlquote %}">{{ node|truncatewords:"18" }}</a>
+&rsaquo; API信息
+</div>
+{% endblock %}
+{% block content %}
+    <div class="module">
+        <div class="form-row">
+            <label for="">user-config.json 配置</label>
+            <pre>
+                <code>
+{
+    "server": "0.0.0.0",
+    "server_ipv6": "::",
+    "server_port": 8388,
+    "local_address": "127.0.0.1",
+    "local_port": 1080,
+    "password": "HGIhZKdog4",
+    "method": "{{ node.method }}",
+    "protocol": "{{ node.protocol }}",
+    "protocol_param": "{{ node.protocol_param }}",
+    "obfs": "{{ node.obfs }}",
+    "obfs_param": "{{ node.obfs_param }}",
+    "speed_limit_per_con": 0,
+    "speed_limit_per_user": 0,
+    "additional_ports" : {}, // only works under multi-user mode
+    "timeout": 120,
+    "udp_timeout": 60,
+    "dns_ipv6": false,
+    "connect_verbose_info": 1,
+    "redirect": "",
+    "fast_open": false
+}
+
+                </code>
+            </pre>
+        </div>
+    <div class="form-row">
+            <label for="">XsadminConfig.py 配置</label>
+            <pre>
+                <code>
+API_INTERVAL = 100  #每100s更新一次
+API_URL = 'http{% if secure %}s{% endif %}://{{ current_site.domain }}{% url "api:user_port" %}'
+API_KEY = '{{ node.api_key }}'
+API_SECRET = '{{ node.api_secret }}'
+                </code>
+            </pre>
+        </div>
+    </div>
+    <style type="text/css">
+    pre {
+    padding: 16px;
+    overflow: auto;
+    font-size: 85%;
+    line-height: 1.45;
+    background-color: #f6f8fa;
+    border-radius: 3px;
+}
+    code, pre {
+    font-family: "Bitstream Vera Sans Mono", Monaco, "Courier New", Courier, monospace;
+    color: #666;
+    font-size: 12px;
+}
+    </style>
+{% endblock %}

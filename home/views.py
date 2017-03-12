@@ -130,7 +130,7 @@ class InviteCodeView(TemplateView):
         context['codes'] = InviteCode.objects.filter(
             (Q(type=InviteCode.TYPE_DEFAULT)|
              (Q(type=InviteCode.TYPE_TIMING)&Q(show_time__gte=now))
-             )&(Q(enable=True)|Q(used_time=None)|Q(used_time__range=(now-delay,now+delay))))
+             )&(Q(enable=True)|Q(used_time=None)|Q(used_time__range=(now-delay,now+delay)))).order_by('-enable','-id')[:30]
         return context
 
 class PostPageView(TemplateView):

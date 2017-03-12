@@ -10,6 +10,8 @@ from django.core import validators
 from django.urls import reverse
 from django_summernote.models import AbstractAttachment
 from django.db.utils import ProgrammingError
+from django.utils import timezone
+from django.conf import settings
 
 def get_usefull_port():
     try:
@@ -81,7 +83,7 @@ class Node(models.Model):
         ('OUT','下线'),
     )
     name = models.CharField(max_length=63,verbose_name='节点名称')
-    location = models.CharField(max_length=127, verbose_name='节点位置')
+    location = models.CharField(max_length=127, verbose_name='节点地理位置')
     ip = models.GenericIPAddressField(verbose_name='节点IP地址',protocol='IPv4')
     ipv6 = models.GenericIPAddressField(blank=True, null= True , protocol='IPv6', verbose_name='节点IPv6地址')
     method = models.CharField(choices=METHOD_CHOICES,max_length=63, default='chacha20', verbose_name='节点加密方式')
@@ -89,6 +91,7 @@ class Node(models.Model):
     status = models.CharField(max_length=63, choices=STATUS_CHOICES,default='INIT', verbose_name='节点状态')
     traffic_rate = models.PositiveIntegerField(verbose_name='流量倍率百分比',help_text='100表示默认1倍', default=100)
     sort = models.SmallIntegerField(verbose_name='排序', default=0, help_text='小的在前面')
+    remark_for_admin = models.TextField('管理员备注',null=True, blank=True, default=None)
     tags = models.ManyToManyField('NodeTag', verbose_name='标签集合', blank=True)
 
     #SSR属性
@@ -114,7 +117,7 @@ class Node(models.Model):
                             help_text='混淆推荐：如果QoS在你的地区明显，混淆建议在http_simple与tls1.2_ticket_auth中选择，具体选择可以通过自己的试验得出。如果选择混淆后反而变慢，那么混淆请选择plain。如果你不在乎QoS，但担心你的个人vps能不能持久使用，那么混淆选择plain或tls1.2_ticket_auth，协议选择auth_aes128_md5或auth_aes128_sha1')
     obfs_param = models.CharField(max_length=63,verbose_name='混淆插件参数',blank=True,default='')
 
-    ssh_port = models.PositiveSmallIntegerField(verbose_name='SSH端口号',default=22)
+    ssh_port = models.PositiveSmallIntegerField(verbose_name='SSH端口号',help_text='用于发送远程命令',default=22)
     last_api_request_time = models.DateTimeField(auto_now_add=True, verbose_name='最后调用远程API的时间')
 
     slug = models.CharField(verbose_name='API Key',unique=True, db_index=True, max_length=127, default=utils.gen_api_key, editable=False)
@@ -179,7 +182,7 @@ class InviteCode(models.Model):
     create_user = models.ForeignKey(User,null=True, editable=False, verbose_name='创建者',on_delete=models.SET_NULL,related_name='created_code_set')
     used_user = models.ForeignKey(User,null=True, blank=True, verbose_name='使用者',on_delete=models.SET_NULL,related_name='used_code_set')
 
-    traffic = models.BigIntegerField(verbose_name='流量',default=0)
+    traffic = models.BigIntegerField(verbose_name='流量',default=settings.INIT_TRANS_ENABLE, help_text='以最小的字节B为单位')
     enable = models.BooleanField(verbose_name='是否可用',default=True)
 
     class Meta:
@@ -231,14 +234,19 @@ class Attachment(AbstractAttachment):
 class TrafficRecord(models.Model):
     u = models.BigIntegerField(verbose_name='上传流量', default=0)
     d = models.BigIntegerField(verbose_name='下载流量', default=0)
-    create_time = models.DateTimeField(verbose_name='产生时间', auto_now_add=True)
+    create_date = models.DateField(verbose_name='产生的日期', auto_now_add=True)
+    create_time = models.TimeField(verbose_name='产生的时间点', auto_now_add=True)
     rate = models.PositiveIntegerField(verbose_name='流量倍率百分比',help_text='100表示默认1倍', default=100)
+    type = models.PositiveSmallIntegerField(verbose_name='类型', default=0, help_text='0:接口自动记录类型；1/2 日/月汇总数据')
+    summary_date = models.DateField(verbose_name='汇总产生日期', null=True, blank=True, default=None)
     port = models.PositiveSmallIntegerField(verbose_name='端口', blank=True, default=None)
     node = models.ForeignKey(Node, null=True, verbose_name='所属节点', on_delete=models.CASCADE)
     class Meta:
         verbose_name = '流量记录'
         verbose_name_plural = verbose_name
-        ordering = ['-create_time']
+        ordering = ['-id']
+    def __str__(self):
+        return '[%d]%s'%(self.port, self.create_time)
 
 #用户动作记录
 class ActionRecord(models.Model):

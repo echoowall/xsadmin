@@ -106,11 +106,9 @@
         downUpChart.setOption(init_down_up_chart_option,true);
         //流量使用记录
         var trans_use_info_char = echarts.init(document.getElementById('trans_use_info'));
-        init_trans_use_info_option.xAxis[0].data = ['2017/2/1','2017/2/2','2017/2/3','2017/2/4','2017/2/5','2017/2/6','2017/2/7','2017/2/8','2017/2/9','2017/2/10','2017/2/11',
-            '2017/2/1','2017/2/2','2017/2/3','2017/2/4','2017/2/5','2017/2/6','2017/2/7','2017/2/8','2017/2/9','2017/2/10','2017/2/11'
-            ,'2017/2/3','2017/2/4','2017/2/5','2017/2/6','2017/2/7','2017/2/8','2017/2/9','2017/2/10','2017/2/11'];
-        init_trans_use_info_option.series[0].data = [620, 732, 701, 734, 1090, 620, 732, 701, 734, 1090, 1130, 1120,1130, 1120,620, 732, 701, 734, 1090, 1130, 1120,620, 732, 701,620, 732, 701, 734, 1090, 1130, 1120, 734, 1090, 1130, 1120];
-        init_trans_use_info_option.series[1].data = [120, 132, 101, 134, 120, 132, 101, 134, 120, 132, 101, 134, 290, 230, 220,290, 230,120, 132, 101, 134, 290, 230, 220, 220,290, 230,120, 132, 101, 134, 290, 230, 220, 220];
+        init_trans_use_info_option.xAxis[0].data = {{ trans_date|safe }};
+        init_trans_use_info_option.series[0].data = {{ trans_u|safe }};
+        init_trans_use_info_option.series[1].data = {{ trans_d|safe }};
         trans_use_info_char.setOption(init_trans_use_info_option,true);
 
     </script>

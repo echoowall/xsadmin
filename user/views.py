@@ -1,19 +1,21 @@
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
 from django.views.generic import *
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import logout as auth_logout,update_session_auth_hash
 from django.shortcuts import redirect,get_object_or_404
+from django.contrib.sites.shortcuts import get_current_site
 from .models import *
 from .forms import *
 from django.core.urlresolvers import reverse,reverse_lazy
-from django.db.models import Q, F
+from django.db.models import Q, F, Sum, fields
 from django.http import HttpResponseRedirect
 
 from home.views import GeeCaptchaValidateMixin
 from django.utils import timezone
-from datetime import datetime
+from datetime import datetime, timedelta
 from home import utils as home_utils
 from django.db import transaction
+from django.http import JsonResponse
 
 
 TO_MB = 1048576
@@ -33,6 +35,20 @@ class DashboardView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['post_list'] = Post.objects.filter(status__iexact='PUBLISHED',content_type__iexact='ANNOUNCE')[:10]
+        trans_list = TrafficRecord.objects.filter(port=self.request.user.port,type=1,summary_date__gt=timezone.now()-timedelta(31)).\
+                    values('summary_date').annotate(sum_u=Sum(F('u')*F('rate')/100, output_field=fields.IntegerField()),
+                    sum_d=Sum(F('d')*F('rate')/100, output_field=fields.IntegerField())).order_by('summary_date')
+        #print(trans_list)
+        trans_date = list()
+        trans_u = list()
+        trans_d = list()
+        for tran in trans_list:
+            trans_date.append(tran['summary_date'].strftime('%Y-%m-%d'))
+            trans_u.append(round(tran['sum_u']/TO_MB, 2))
+            trans_d.append(round(tran['sum_d']/TO_MB, 2))
+        context['trans_date'] = trans_date
+        context['trans_u'] = trans_u
+        context['trans_d'] = trans_d
         return context
 
 class ProfileView(LoginRequiredMixin, UpdateView):
@@ -51,6 +67,9 @@ class ProfileView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
+
+class PersonalProfileView(LoginRequiredMixin, TemplateView):
+    template_name = 'user/personal_profile.html'
 
 
 class PasswdView(LoginRequiredMixin, UpdateView):
@@ -102,7 +121,7 @@ class CheckInView(LoginRequiredMixin, GeeCaptchaValidateMixin, TemplateView):
         last_check_in_time = user.last_check_in_time
         if last_check_in_time:
             now = timezone.now()
-            return now.strftime('%Y-%m-%d') != last_check_in_time.strftime('%Y-%m-%d')
+            return last_check_in_time < now and now.strftime('%Y-%m-%d') != last_check_in_time.strftime('%Y-%m-%d')
         return True
 
     def get_context_data(self, **kwargs):
@@ -160,6 +179,35 @@ class NodeListView(LoginRequiredMixin, ListView):
             queryset = queryset.filter(tags= tag_slug)
         return queryset
 
+class DownloadNodeCfgView(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        queryset = Node.objects.filter(~Q(status__iexact='OUT'))
+        servers = list()
+        user = request.user
+        for s in queryset:
+            server = dict()
+            server['server'] = s.ip
+            server['server_port'] = user.port
+            server['password'] = user.passwd
+            server['method'] = s.method
+            server['remarks'] = s.name
+            server["protocol"] = s.protocol
+            server["protocolparam"] = s.protocol_param
+            server["obfs"] = s.obfs
+            server["obfsparam"] = s.obfs_param
+            servers.append(server)
+
+        cfg = {"configs": servers,
+               "index": 0,"global":False,"enabled":True,
+               "shareOverLan":False,"isDefault":False,
+               "localPort":1080,"pacUrl":None,"useOnlinePac":False}
+        response = JsonResponse(cfg)
+        response['Content-Type'] = 'application/octet-stream'
+        response['Content-Disposition'] = 'attachment;filename=gui-config.json'
+        return response
+
+
 class NodeQrInfoView(LoginRequiredMixin, DetailView):
 
     context_object_name = 'node'
@@ -176,17 +224,35 @@ class NodeQrInfoView(LoginRequiredMixin, DetailView):
         return self.get(request, *args, **kwargs)
 
 
-class PostDetailView(DetailView):
+class PostDetailView(LoginRequiredMixin, DetailView):
     model = Post
 
     def get_queryset(self):
         queryset = super().get_queryset().filter(status__iexact='PUBLISHED',content_type__iexact='ANNOUNCE')
         return queryset
 
-class PostListView(ListView):
+class PostListView(LoginRequiredMixin, ListView):
     paginate_by = 10
     model = Post
 
     def get_queryset(self):
         queryset = super().get_queryset().filter(status__iexact='PUBLISHED',content_type__iexact='ANNOUNCE')
         return queryset
+
+
+def node_api_info_viem(request, object_id, model_admin):
+    admin_site = model_admin.admin_site
+    opts = model_admin.model._meta
+    node = get_object_or_404(Node, pk=object_id)
+    context = {
+        'admin_site': admin_site.name,
+        'opts': opts,
+        'title': '节点API信息',
+        'cl':model_admin.model._meta,
+        'current_site': get_current_site(request),
+        #'root_path': '%s' % admin_site.root_path,
+        'secure': request.is_secure(),
+        'app_label': opts.app_label,
+        'node': node,
+    }
+    return render_to_response('user/node_admin_api_info.html', context)

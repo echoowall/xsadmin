@@ -28,8 +28,13 @@
             {% for code in codes %}
             <tr>
                 <td>{{ forloop.counter }}</td>
+                {% if code.enable %}
                 <td><a href="{% url 'home:register' %}?invite_code={{ code.code }}">{{ code.code }}</a></td>
-                <td>{{ code.enable|yesno:"可用,no,失效"  }}</td>
+                <td><a href="{% url 'home:register' %}?invite_code={{ code.code }}">有效</a></td>
+                {% else %}
+                <td>{{ code.code }}</td>
+                <td>失效</td>
+                {% endif %}
             </tr>
             {% endfor %}
             </tbody>

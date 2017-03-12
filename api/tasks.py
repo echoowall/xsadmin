@@ -14,17 +14,32 @@ from celery.task import periodic_task
 from celery.schedules import crontab
 
 from user.models import User, TrafficRecord
-from django.db.models import When, Case, F, Value
-from datetime import datetime
+from django.db.models import When, Case, F, Sum, fields
+from datetime import datetime, timedelta
+from django.utils import timezone
 import logging
 
-@periodic_task(name='重置所有用户已使用流量', run_every= crontab(hour=0, minute=0, day_of_month=1))
+@periodic_task(name='重置所有用户已使用流量', run_every= crontab(minute=0, hour=0, day_of_month=1))
 def reset_all_users_transfer():
     User.objects.update(u=0, d=0)
 
+@periodic_task(name='用户流量记录汇总', run_every= crontab(minute=30, hour=3))
+def reset_all_users_transfer():
+    # 1.每天凌晨汇总用户昨天使用的流量
+    yesterday = timezone.now() - timedelta(days=1)
+    traffic_list = TrafficRecord.objects.filter(create_date=yesterday).values('port', 'node_id')\
+        .annotate(sum_u=Sum(F('u') * F('rate') / 100, output_field=fields.IntegerField()),
+        sum_d=Sum(F('d') * F('rate') / 100, output_field=fields.IntegerField())).order_by()
+    for traf in traffic_list:
+        #print(traf)
+        TrafficRecord(u=traf['sum_u'], d=traf['sum_d'], type=1, port=traf['port'], summary_date=yesterday,
+                      node_id=traf['node_id']).save()
+    # 2.删除7天前的流量记录，防止表数据过大
+    TrafficRecord.objects.filter(summary_date__lte=timezone.now() - timedelta(days=7)).delete()
+
 @shared_task(name='从节点API传来的流量数据更新到数据库')
 def update_users_transfer(data_list, node):
-    logging.info('准备更新流量啦：%s' % data_list)
+    #logging.info('准备更新流量啦：%s' % data_list)
     #批量插入
     traffic_list = list()
     case_u = list()
