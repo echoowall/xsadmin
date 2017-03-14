@@ -93,11 +93,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
-
-
 LANGUAGE_CODE = 'zh-hans'
 
 TIME_ZONE = 'Asia/Shanghai'
@@ -108,7 +105,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
@@ -117,7 +113,6 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
-MEDIA_ROOT = 'upload/'
 MEDIA_URL = '/upload/'
 
 def uploaded_filepath(instance, filename):
@@ -205,8 +200,25 @@ LOGIN_URL = '/login/'
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+CELERY_BROKER_TRANSPORT = 'redis'
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/1'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIME_ZONE = TIME_ZONE
 #CELERY_RESULT_BACKEND = 'django-cache'
 #CELERY_RESULT_BACKEND = 'django-db'
+
+USER_PORTS_CACHE_TIME = 45
 
 PROJECT_CONFIG = {
     'PROJECT_NAME':'xsadmin',
