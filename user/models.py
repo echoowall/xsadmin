@@ -21,6 +21,8 @@ def get_usefull_port():
     if not max_port:
         max_port = 17236
     new_port = int(max_port) + random.randint(2, 5)
+    if new_port in (24554, 60177, 60179):
+        new_port += 1
     return new_port
 
 # 用户模型.
@@ -32,7 +34,7 @@ class User(AbstractUser):
     t = models.IntegerField(verbose_name='最后使用时间戳',default=0)
     u = models.BigIntegerField(verbose_name='上传流量',default=0)
     d = models.BigIntegerField(verbose_name='下载流量',default=0)
-    transfer_enable = models.BigIntegerField(verbose_name='每月流量限额',default=0)
+    transfer_enable = models.BigIntegerField(verbose_name='每月流量限额',default=settings.INIT_TRANS_ENABLE)
     switch = models.BooleanField(verbose_name='流量开关状态',default=True)
     last_check_in_time = models.DateTimeField(verbose_name='最后签到时间',null=True)
     check_in_count = models.IntegerField(verbose_name='连续签到次数',default=0)
@@ -47,7 +49,7 @@ class User(AbstractUser):
     last_gen_invite_code_time = models.DateTimeField(verbose_name='上次生成邀请码时间',null=True)
 
     email_validate_code = models.CharField(max_length=63,verbose_name='邮箱验证码',default=utils.gen_val_code)
-    bind_email = models.PositiveSmallIntegerField(verbose_name='是否已验证邮箱',choices=((1,'已验证'),(0,'未验证')),default=0)
+    bind_email = models.BooleanField(verbose_name='是否已验证邮箱', default=False)
 
     wx_validate_code = models.CharField(max_length=31,verbose_name='微信公众号验证码',default=utils.gen_val_code)
     wxopenid = models.CharField(max_length=127,verbose_name='微信OPENID',null=True)

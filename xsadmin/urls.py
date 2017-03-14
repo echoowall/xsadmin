@@ -22,7 +22,6 @@ from django.views.generic import RedirectView
 from django.urls import reverse_lazy
 admin.autodiscover()
 admin.site.login = RedirectView.as_view(url=settings.LOGIN_REDIRECT_URL)
-admin.site.logout = RedirectView.as_view(url=settings.LOGIN_REDIRECT_URL)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),

@@ -65,7 +65,11 @@ class LoginView(AuthedRedirectMixin, GeeCaptchaValidateMixin, FormView):
         return redirect_to
 
     def form_valid(self, form):
-        login(self.request, form.user_cache)
+        user = form.user_cache
+        login(self.request, user)
+        user.this_login_date = timezone.now()
+        user.this_login_ip = utils.get_remote_ip(self.request)
+        user.save()
         if not form.cleaned_data.get('remember'):
             self.request.session.set_expiry(0)
         return super(LoginView,self).form_valid(form)

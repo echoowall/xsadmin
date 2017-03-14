@@ -19,6 +19,11 @@ class UserAdmin(admin.ModelAdmin):
     search_fields = ('username','email')
     list_filter = ('is_active','is_staff')
     actions = [make_inactive,make_active]
+    fieldsets = (
+        (None, {'fields': ('port', 'passwd', 'switch', 'transfer_enable')}),
+        ('高级选项', {'classes': ('collapse',),
+                  'fields': ('invite_num', 'email', 'email_validate_code', 'bind_email', 'wx_validate_code')})
+    )
 
 admin.site.register(User, UserAdmin)
 
@@ -44,7 +49,7 @@ class NodeAdmin(admin.ModelAdmin):
                    'obfs','obfs_param','ssh_port')}),
     )
 
-admin.site.register(Node,NodeAdmin)
+admin.site.register(Node, NodeAdmin)
 admin.site.register(NodeTag)
 
 

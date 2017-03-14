@@ -97,3 +97,5 @@ celerybeat.pid
 .vagrant/
 celerybeat-*
 log/
+manage_dev.py
+xsadmin/settings_dev.py
