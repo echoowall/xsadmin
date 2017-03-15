@@ -86,6 +86,7 @@ class Node(models.Model):
     )
     name = models.CharField(max_length=63,verbose_name='节点名称')
     location = models.CharField(max_length=127, verbose_name='节点地理位置')
+    flag = models.CharField(max_length=63, verbose_name='节点国旗图标', blank=True, default=None, help_text='us：美国；jp：日本；hk：香港；sg：新加坡；cn：中国；kr：韩国；gb：英国；参考：http://flag-icon-css.lip.is/')
     ip = models.GenericIPAddressField(verbose_name='节点IP地址',protocol='IPv4')
     ipv6 = models.GenericIPAddressField(blank=True, null= True , protocol='IPv6', verbose_name='节点IPv6地址')
     method = models.CharField(choices=METHOD_CHOICES,max_length=63, default='chacha20', verbose_name='节点加密方式')

@@ -18,7 +18,13 @@
                 <div class="item-info">
                     <div class="item-image-box">
                         <div class="item-image">
-                            <a href="javascript:void(0)"><img src="{% static 'images/logo.png' %}" alt="Image" class="img-responsive"></a>
+                        <a href="javascript:void(0)">
+                            {% if node.flag %}
+                                <span class="flag-icon flag-icon-{{ node.flag }}"></span>
+                            {% else %}
+                                <img src="{% static 'images/logo.png' %}" alt="Image" class="img-responsive">
+                            {% endif %}
+                            </a>
                         </div><!-- item-image -->
                     </div>
 

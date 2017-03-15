@@ -4585,10 +4585,14 @@ border-left: 3px solid transparent;
 
 .job-ad-item .item-image {
     width: 100px;
-    border: 1px solid #f3f3f3;
+    border: 1px solid #ebebeb;
     overflow: hidden;
 }
-
+.job-ad-item .item-image .flag-icon{
+    width: 100px;
+    height: 75px;
+    line-height: 75px;
+}
 .job-ad-item .item-info {
 	min-height: 0;
 	overflow: hidden;

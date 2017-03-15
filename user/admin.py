@@ -43,7 +43,7 @@ class NodeAdmin(admin.ModelAdmin):
     search_fields = ('name','location','info','remark_for_admin')
     list_filter = ('status',)
     fieldsets = (
-        (None, {'fields': ('name','ip','location','method','status','traffic_rate','info')}),
+        (None, {'fields': ('name','ip','location','method','status','traffic_rate','info','flag')}),
         ('更多信息', {'classes': ('collapse',),
         'fields': ('ipv6','sort','remark_for_admin','tags','protocol','protocol_param',
                    'obfs','obfs_param','ssh_port')}),
