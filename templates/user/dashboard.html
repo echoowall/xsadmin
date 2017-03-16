@@ -107,8 +107,8 @@
         //流量使用记录
         var trans_use_info_char = echarts.init(document.getElementById('trans_use_info'));
         init_trans_use_info_option.xAxis[0].data = {{ trans_date|safe }};
-        init_trans_use_info_option.series[0].data = {{ trans_u|safe }};
-        init_trans_use_info_option.series[1].data = {{ trans_d|safe }};
+        init_trans_use_info_option.series[0].data = {{ trans_d|safe }};
+        init_trans_use_info_option.series[1].data = {{ trans_u|safe }};
         trans_use_info_char.setOption(init_trans_use_info_option,true);
 
     </script>

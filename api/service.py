@@ -15,8 +15,9 @@ import logging
 logger = logging.getLogger('xsadminloger')
 
 def update_transfer_fetch_users(data, node):
-    update_users_transfer.delay(data, node)
-    #update_users_transfer(data, node)
+    if data:  #如果没有传过来流量，我们不处理
+        update_users_transfer.delay(data, node)
+        #update_users_transfer(data, node)
     user_ports_data = cache.get('user_ports_data')
     if user_ports_data is None:
         user_ports_data = User.objects.filter(transfer_enable__gt=F('u') + F('d'), switch=True,
