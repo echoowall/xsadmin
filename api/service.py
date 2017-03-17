@@ -21,7 +21,8 @@ def update_transfer_fetch_users(data, node):
     user_ports_data = cache.get('user_ports_data')
     if user_ports_data is None:
         user_ports_data = User.objects.filter(transfer_enable__gt=F('u') + F('d'), switch=True,
-              is_active=True).extra(select={'password': 'passwd'}).values('port', 'password')
+              is_active=True, node_group_id=node.get('node_group_id',1))\
+              .extra(select={'password': 'passwd'}).values('port', 'password')
         user_ports_data = list(user_ports_data)
         cache.set('user_ports_data', user_ports_data, timeout=settings.USER_PORTS_CACHE_TIME)
         logger.info('set user_ports_data cache:%s'%user_ports_data)

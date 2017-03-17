@@ -7,7 +7,7 @@
 @desc: 工具类
 '''
 import uuid, hashlib, random
-from django.db.utils import ProgrammingError
+from django.db.utils import ProgrammingError, InternalError
 from django.core.cache import cache
 from django.db.models import Q
 from django.shortcuts import reverse
@@ -45,14 +45,14 @@ def refush_node_app_keyset(node_cls = None):
         if not node_cls:
             from .models import Node
             node_cls = Node
-        nodes_info = node_cls.objects.filter(~Q(status__iexact='OUT')).values_list('api_key', 'api_secret', 'id','traffic_rate')
+        nodes_info = node_cls.objects.filter(~Q(status__iexact='OUT')).values_list('api_key', 'api_secret', 'id','traffic_rate','node_group_id')
         nodes_dict = {}
         for node in nodes_info:
-            nodes_dict[node[0]] = (node[1], node[2], node[3])
+            nodes_dict[node[0]] = (node[1], node[2], node[3], node[4])
         logger.info('nodes_info is :%s' % nodes_dict)
         cache.set('node_api_key_set', nodes_dict, timeout=None)  # 永不过期的缓存
         return nodes_dict
-    except ProgrammingError:
+    except (ProgrammingError, InternalError):
         return {}
 
 

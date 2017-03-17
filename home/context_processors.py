@@ -21,6 +21,7 @@ def site_config(request):
         siteconf['USER_DASHBOARD_TITLE'] = now_bread.get('title','无标题')
     #print('siteconf',siteconf)
     siteconf.update(settings.PROJECT_CONFIG)
+    siteconf['NODE_GROUPS'] = settings.NODE_GROUPS
     return siteconf
 
 def get_menus_breadcrumbs(url_name ):

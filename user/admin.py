@@ -20,7 +20,7 @@ class UserAdmin(admin.ModelAdmin):
     list_filter = ('is_active','is_staff')
     actions = [make_inactive,make_active]
     fieldsets = (
-        (None, {'fields': ('port', 'passwd', 'switch', 'transfer_enable')}),
+        (None, {'fields': ('port', 'passwd', 'switch', 'transfer_enable', 'node_group_id')}),
         ('高级选项', {'classes': ('collapse',),
                   'fields': ('invite_num', 'email', 'email_validate_code', 'bind_email', 'wx_validate_code')})
     )
@@ -39,13 +39,13 @@ class NodeAdmin(admin.ModelAdmin):
         from .views import node_api_info_viem
         return node_api_info_viem(reqeust,id,self)
 
-    list_display = ('name', 'location', 'ip','method','traffic_rate','status', 'sort')
+    list_display = ('name', 'location', 'ip','method','traffic_rate','node_group_id','status', 'sort')
     search_fields = ('name','location','info','remark_for_admin')
-    list_filter = ('status',)
+    list_filter = ('status','node_group_id',)
     fieldsets = (
         (None, {'fields': ('name','ip','location','method','status','traffic_rate','info','flag')}),
         ('更多信息', {'classes': ('collapse',),
-        'fields': ('ipv6','sort','remark_for_admin','tags','protocol','protocol_param',
+        'fields': ('ipv6','node_group_id','sort','remark_for_admin','tags','protocol','protocol_param',
                    'obfs','obfs_param','ssh_port')}),
     )
 

@@ -157,6 +157,18 @@ class CheckInView(LoginRequiredMixin, GeeCaptchaValidateMixin, TemplateView):
 class BindEmailView(LoginRequiredMixin, UpdateView):
     pass
 
+class SwitchNodeGroupView(LoginRequiredMixin, GeeCaptchaValidateMixin, View):
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        now = timezone.now()
+        if not user.last_change_node_group_time or user.last_change_node_group_time + timedelta(hours=72) < now:
+            node_group_id = request.POST.get('node_group_id')
+            if node_group_id:
+                user.last_change_node_group_time = timezone.now()
+                user.node_group_id = node_group_id
+                user.save()
+        return HttpResponseRedirect(reverse('user:nodes'))
+
 class NodeListView(LoginRequiredMixin, ListView):
 
     template_name = 'user/nodes.html'
@@ -164,6 +176,15 @@ class NodeListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        lastchange = self.request.user.last_change_node_group_time
+        if lastchange:
+            switchable_time = lastchange + timedelta(hours=72)
+            node_group_switchable = True if switchable_time<timezone.now() else False
+        else:
+            switchable_time = timezone.now()
+            node_group_switchable = True
+        context['node_group_switchable_time'] = switchable_time
+        context['node_group_switchable'] = node_group_switchable
         tag_slug = self.kwargs.get('tag_slug')
         if tag_slug:
             context['node_tag'] = get_object_or_404(NodeTag, slug= tag_slug)
@@ -172,7 +193,7 @@ class NodeListView(LoginRequiredMixin, ListView):
         return context
 
     def get_queryset(self):
-        queryset = Node.objects.filter(~Q(status__iexact='OUT'))
+        queryset = Node.objects.filter(~Q(status__iexact='OUT')&Q(node_group_id=self.request.user.node_group_id))
         tag_slug = self.kwargs.get('tag_slug')
         #print(tag,type(tag))
         if tag_slug:
@@ -182,7 +203,7 @@ class NodeListView(LoginRequiredMixin, ListView):
 class DownloadNodeCfgView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
-        queryset = Node.objects.filter(~Q(status__iexact='OUT'))
+        queryset = Node.objects.filter(~Q(status__iexact='OUT')&Q(node_group_id=self.request.user.node_group_id))
         servers = list()
         user = request.user
         for s in queryset:

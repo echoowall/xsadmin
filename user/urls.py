@@ -20,6 +20,7 @@ urlpatterns = [
     url(r'^personal_profile/$', PersonalProfileView.as_view(), name='personal_profile'),
     url(r'^passwd/$', PasswdView.as_view(), name='passwd'),
     url(r'^checkin/$', CheckInView.as_view(), name='checkin'),
+    url(r'^switch_node_group/$', SwitchNodeGroupView.as_view(), name='switch_node_group'),
     url(r'^password/$', PasswordView.as_view(), name='password'),
     url(r'^nodes/(?P<tag_slug>[\w-]+)?$', NodeListView.as_view(), name='nodes'),
     url(r'^node_qr_info/$', NodeQrInfoView.as_view(), name= 'node_qr_info'),

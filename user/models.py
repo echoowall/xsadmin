@@ -3,13 +3,13 @@ from django.db import models
 
 # Create your models here.
 from django.contrib.auth.models import AbstractUser
-from django.db.models import Max
+from django.db.models import Max, Count, Q
 from . import utils
 import random, base64
 from django.core import validators
 from django.urls import reverse
 from django_summernote.models import AbstractAttachment
-from django.db.utils import ProgrammingError
+from django.db.utils import ProgrammingError, InternalError
 from django.utils import timezone
 from django.conf import settings
 
@@ -24,6 +24,24 @@ def get_usefull_port():
     if new_port in (24554, 60177, 60179):
         new_port += 1
     return new_port
+
+def get_node_group():
+    try:
+        group_ids = set()
+        for g in settings.NODE_GROUPS:
+            group_ids.add(g[0])
+        user_group_ids = User.objects.values_list('node_group_id', flat=True).order_by().distinct()
+        #print(user_group_ids.query)
+        #print(set(user_group_ids))
+        not_have_group = group_ids-set(user_group_ids)
+        if not_have_group:
+            return random.choice(tuple(not_have_group))
+        user_count = User.objects.filter(Q(switch=True)&Q(is_active=True)&Q(node_group_id__in=group_ids)).values('node_group_id').annotate(n=Count('*')).order_by('n')
+        #print(user_count.query)
+        if user_count:
+            return user_count[0].get('node_group_id', 1)
+    except (ProgrammingError, InternalError):
+        return 1
 
 # 用户模型.
 class User(AbstractUser):
@@ -53,6 +71,9 @@ class User(AbstractUser):
 
     wx_validate_code = models.CharField(max_length=31,verbose_name='微信公众号验证码',default=utils.gen_val_code)
     wxopenid = models.CharField(max_length=127,verbose_name='微信OPENID',null=True)
+
+    node_group_id = models.PositiveSmallIntegerField('节点组', default=get_node_group, choices=settings.NODE_GROUPS, help_text='settings_custom.py的NODE_GROUPS字段')
+    last_change_node_group_time = models.DateTimeField('最后修改节点组时间', null=True, blank=True, default=None)
 
     class Meta:
         verbose_name = '用户'
@@ -96,6 +117,8 @@ class Node(models.Model):
     sort = models.SmallIntegerField(verbose_name='排序', default=0, help_text='小的在前面')
     remark_for_admin = models.TextField('管理员备注',null=True, blank=True, default=None)
     tags = models.ManyToManyField('NodeTag', verbose_name='标签集合', blank=True)
+
+    node_group_id = models.PositiveSmallIntegerField('节点组', default=1, choices=settings.NODE_GROUPS, help_text='settings_custom.py的NODE_GROUPS字段')
 
     #SSR属性
     ORIGIN_CHOICES = (

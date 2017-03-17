@@ -29,6 +29,13 @@ SITE_CONFIG = {
     'SITE_DESC':'One powerful tool...',
 }
 
+NODE_GROUPS = (
+    (1, 'S-Light计划1'),
+    (2, 'S-Light计划2'),
+    (3, 'S-Light计划3'),
+    (4, 'S-Light计划4'),
+)
+
 INIT_TRANS_ENABLE = 6*1073741824 #默认是6G的流量
 
 STATIC_ROOT = "/data/xsadmin_deploy/static/"

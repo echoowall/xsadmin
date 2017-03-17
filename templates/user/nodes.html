@@ -12,8 +12,19 @@
 <div class="content-body">
     <div class="row">
         <div class="col-xs-12 tab-content node-lists">
-        <div role="tabpanel" class="">
-            {% for node in nodeLists %}
+        <div role="tabpanel" class="clearfix">
+        <ul class="nav nav-tabs transparent">
+        {% for ng in NODE_GROUPS %}
+        <li class="{% if ng.0 == user.node_group_id %}active{% endif %}">
+            <a href="#node-tab{{ ng.0 }}" data-toggle="tab">{{ ng.1 }}</a>
+        </li>
+        {% endfor %}
+        </ul>
+        <div class="tab-content transparent">
+        {% for ng in NODE_GROUPS %}
+        {% if ng.0 == user.node_group_id %}
+            <div class="tab-pane fade active in" id="node-tab{{ ng.0 }}">
+                {% for node in nodeLists %}
             <div class="job-ad-item">
                 <div class="item-info">
                     <div class="item-image-box">
@@ -47,7 +58,23 @@
                 </div><!-- item-info -->
             </div><!-- ad-item -->
             {% endfor %}
-
+            </div>
+        {% else %}
+            <div class="tab-pane fade in" id="node-tab{{ ng.0 }}">
+            <div class="node-group-none">
+                <h4 class="title">很抱歉，您暂时未开通此节点组</h4>
+                <p>用户每72小时可以进行一次节点组切换</p>
+                {% if node_group_switchable %}
+                    <p><a href="javascript:switch_node_group({{ ng.0 }})" class="btn btn-primary">切换为本节点组</a></p>
+                {% else %}
+                <div class="node-getting-started"></div>
+                <p class="node-getting-started-note"></p>
+                {% endif %}
+            </div>
+            </div>
+        {% endif %}
+        {% endfor %}
+        </div>
         </div>
         </div>
     </div>
@@ -63,10 +90,7 @@
             </div>
             <div class="modal-body">
                 <div class="loader">
-                    <div class="ball-pulse-sync">
-                        <div></div>
-                        <div></div>
-                        <div></div></div>
+                    <div class="ball-pulse-sync"><div></div><div></div><div></div></div>
                     <p>加载中，客观请稍等...</p>
                 </div>
                 <div class="row" id="qrcode-ajax-content">
@@ -76,9 +100,43 @@
     </div>
 </div>
 
+<div class="modal fade col-xs-12" id="switch-node-group" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">切换节点组</h4>
+            </div>
+            <div class="modal-body">
+                <p>请注意：</p>
+                <ol>
+                    <li>节点组切换后，您可能需要稍等几分钟，新节点才会生效，您会得到新的节点，也需要重新配置各个节点。</li>
+                    <li>用户每72小时才能切换一次节点组，请确定后再进行节点切换</li>
+                    <li>请勿随意反复做切换操作</li>
+                </ol>
+                <p>
+                <form method="post" action="{% url 'user:switch_node_group' %}">
+                {% csrf_token %}
+                    <input type="hidden" name="node_group_id" id="node_group_id-input">
+                <div style="margin-bottom: 30px;">
+                   <div id="embed-captcha"></div>
+                    <p id="wait" class="show">正在加载验证码......</p>
+                    <p id="notice" class="hide">请先拖动验证码到相应位置</p>
+                </div>
+                <button type="submit" id="embed-submit" class="btn btn-success green-btn"> 切换
+                    <i class="fa fa-check-circle"></i></button>
+                </form>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 {% endblock %}
 {% block js %}
     <script src="//cdn.bootcss.com/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+    <script src="//static.geetest.com/static/tools/gt.js"></script>
     <script type="text/javascript">
         function showQrCode(slug) {
             $('#cmpltadminModal-qrcode .loader').show();
@@ -89,5 +147,54 @@
                 $("#qrcode-ajax-content").html(data);
             },'html');
         }
+        function switch_node_group(id) {
+            $("#node_group_id-input").val(id);
+            $("#switch-node-group").modal('show',{backdrop:"static"});
+        }
+
+        var note = $('.node-getting-started-note'),
+		ts = new Date('{{ node_group_switchable_time|date:"m d,Y H:i:s" }}');
+        $('.node-getting-started').each(function () {
+            $(this).countdown({
+            timestamp	: ts,
+            callback	: function(days, hours, minutes, seconds){
+                var message = "还需要等 ";
+                message += days + "天";
+                message += hours + "小时";
+                message += minutes + "分钟";
+                message += seconds + "秒，您才可以切换";
+                note.html(message);
+            }
+        });
+        });
+        //geetest
+        var handlerEmbed = function (captchaObj) {
+            $("#embed-submit").click(function (e) {
+                var validate = captchaObj.getValidate();
+                if (!validate) {
+                    $("#notice")[0].className = "show";
+                    setTimeout(function () {
+                        $("#notice")[0].className = "hide";
+                    }, 2000);
+                    e.preventDefault();
+                }
+            });
+            // 将验证码加到id为captcha的元素里
+            captchaObj.appendTo("#embed-captcha");
+            captchaObj.onReady(function () {
+                $("#wait")[0].className = "hide";
+            });
+        };
+        $.post('{% url 'home:get_gee_captcha' %}?t='+ (new Date()).getTime(),
+            {'csrfmiddlewaretoken':'{{ csrf_token }}'},
+            function(data){
+                initGeetest({
+                gt: data.gt,
+                challenge: data.challenge,
+                product: "embed", // 产品形式，包括：float，embed，popup。注意只对PC版验证码有效
+                offline: !data.success // 表示用户后台检测极验服务器是否宕机，一般不需要关注
+            }, handlerEmbed);
+        });
+</script>
     </script>
 {% endblock %}

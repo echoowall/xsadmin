@@ -6,7 +6,7 @@ from .models import *
 from datetime import timedelta
 from django.db.models import Sum,Count,Avg,F,fields
 from django.utils import timezone
-
+'''
 class TrafficRecordTest(TestCase):
 
     def setUp(self):
@@ -36,4 +36,14 @@ class TrafficRecordTest(TestCase):
         # 2.删除过去72小时的流量记录，防止表数据过大
         #TrafficRecord.objects.filter(summary_date__lte=timezone.now() - timedelta(days=3)).delete()
 
+'''
+
+class UserGroupTest(TestCase):
+    def setUp(self):
+        pass
+
+    def test_add_user(self):
+        for i in range(100):
+            u= User.objects.create_user('chao%d'%i,email='chao%d@gmail.com'%i,password='123')
+            print(u.node_group_id)
 

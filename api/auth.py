@@ -53,9 +53,10 @@ class SignatureAuthentication(BaseAuthentication):
             raise AuthenticationFailed('Signature is error')
         node_id = api_key_value[1]
         node_rate = api_key_value[2]
-        if not node_id or not node_rate:
-            raise AuthenticationFailed('no node_id or node_rate,please notice the admin')
-        request.node = {'node_id': node_id, 'node_rate': node_rate}
+        node_group_id = api_key_value[3]
+        if not node_id or not node_rate or not node_group_id:
+            raise AuthenticationFailed('no node_id or node_rate or node_group_id,please notice the admin')
+        request.node = {'node_id': node_id, 'node_rate': node_rate, 'node_group_id': node_group_id}
         return None
 
     def signature_params(self, api_key, nonce_str, api_secret, timestamp):
