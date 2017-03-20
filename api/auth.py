@@ -12,6 +12,9 @@ from datetime import datetime
 from django.core.cache import cache
 from user.utils import refush_node_app_keyset
 import logging
+from wechatpy import parse_message
+from wechatpy.utils import check_signature
+from wechatpy.exceptions import InvalidSignatureException
 
 logger = logging.getLogger('xsadminloger')
 
@@ -64,3 +67,14 @@ class SignatureAuthentication(BaseAuthentication):
         sign_str = '%s|%s|%s|%d' % (api_key, nonce_str, api_secret, timestamp)
         m.update(sign_str.encode())
         return m.hexdigest()
+
+class WeChatSignatureAuthentication(BaseAuthentication):
+    '''
+    微信接口签名验证
+    '''
+    def authenticate(self, request):
+        token = '666xxx'
+        try:
+            check_signature(token, request.GET.get('signature'), request.GET.get('timestamp'), request.GET.get('nonce'))
+        except InvalidSignatureException:
+            raise AuthenticationFailed('signature error')

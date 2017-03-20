@@ -30,10 +30,7 @@ SITE_CONFIG = {
 }
 
 NODE_GROUPS = (
-    (1, 'S-Light计划1'),
-    (2, 'S-Light计划2'),
-    (3, 'S-Light计划3'),
-    (4, 'S-Light计划4'),
+    (1, '默认组'),
 )
 
 INIT_TRANS_ENABLE = 6*1073741824 #默认是6G的流量

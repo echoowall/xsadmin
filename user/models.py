@@ -26,22 +26,24 @@ def get_usefull_port():
     return new_port
 
 def get_node_group():
-    try:
-        group_ids = set()
-        for g in settings.NODE_GROUPS:
-            group_ids.add(g[0])
-        user_group_ids = User.objects.values_list('node_group_id', flat=True).order_by().distinct()
-        #print(user_group_ids.query)
-        #print(set(user_group_ids))
-        not_have_group = group_ids-set(user_group_ids)
-        if not_have_group:
-            return random.choice(tuple(not_have_group))
-        user_count = User.objects.filter(Q(switch=True)&Q(is_active=True)&Q(node_group_id__in=group_ids)).values('node_group_id').annotate(n=Count('*')).order_by('n')
-        #print(user_count.query)
-        if user_count:
-            return user_count[0].get('node_group_id', 1)
-    except (ProgrammingError, InternalError):
-        return 1
+    if hasattr(settings, 'NODE_GROUPS') and len(settings.NODE_GROUPS) > 1:
+        try:
+            group_ids = set()
+            for g in settings.NODE_GROUPS:
+                group_ids.add(g[0])
+            user_group_ids = User.objects.values_list('node_group_id', flat=True).order_by().distinct()
+            #print(user_group_ids.query)
+            #print(set(user_group_ids))
+            not_have_group = group_ids-set(user_group_ids)
+            if not_have_group:
+                return random.choice(tuple(not_have_group))
+            user_count = User.objects.filter(Q(switch=True)&Q(is_active=True)&Q(node_group_id__in=group_ids)).values('node_group_id').annotate(n=Count('*')).order_by('n')
+            #print(user_count.query)
+            if user_count:
+                return user_count[0].get('node_group_id', 1)
+        except (ProgrammingError, InternalError):
+            pass
+    return 1
 
 # 用户模型.
 class User(AbstractUser):

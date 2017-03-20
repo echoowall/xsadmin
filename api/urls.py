@@ -25,3 +25,7 @@ urlpatterns = [
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
+
+urlpatterns += [
+    url(r'^wechat/$', WeChatView.as_view(), name='wechat'),
+]
