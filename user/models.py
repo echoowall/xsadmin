@@ -86,7 +86,7 @@ class User(AbstractUser):
         return self.username
 
 #节点模型
-class Node(models.Model):
+class AbstractNode(models.Model):
     METHOD_CHOICES = (
         ('rc4-md5', 'rc4-md5'),
         ('chacha20', 'chacha20'),
@@ -120,8 +120,6 @@ class Node(models.Model):
     remark_for_admin = models.TextField('管理员备注',null=True, blank=True, default=None)
     tags = models.ManyToManyField('NodeTag', verbose_name='标签集合', blank=True)
 
-    node_group_id = models.PositiveSmallIntegerField('节点组', default=1, choices=settings.NODE_GROUPS, help_text='settings_custom.py的NODE_GROUPS字段')
-
     #SSR属性
     ORIGIN_CHOICES = (
         ('origin','origin：原版协议'),
@@ -153,9 +151,7 @@ class Node(models.Model):
     api_secret = models.CharField(max_length=255,verbose_name='API Secret 密匙',default=utils.gen_api_secret)
 
     class Meta:
-        verbose_name = '节点'
-        verbose_name_plural = verbose_name
-        ordering = ['sort','id']
+        abstract = True
 
     def __str__(self):
         return '%s[%s]'%(self.name,self.ip)
@@ -175,6 +171,14 @@ class Node(models.Model):
     @property
     def ss_protocol(self):
         return '%s:%s@%s:%s' % (self.method, self.passwd, self.ip, self.port)
+
+class Node(AbstractNode):
+    node_group_id = models.PositiveSmallIntegerField('节点组', default=1, choices=settings.NODE_GROUPS,
+                                                     help_text='settings_custom.py的NODE_GROUPS字段')
+    class Meta:
+        verbose_name = '节点'
+        verbose_name_plural = verbose_name
+        ordering = ['sort', 'id']
 
 #节点标签模型
 class NodeTag(models.Model):
