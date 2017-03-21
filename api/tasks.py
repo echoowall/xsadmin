@@ -27,7 +27,7 @@ def reset_all_users_transfer():
 def reset_all_users_transfer():
     # 1.每天凌晨汇总用户昨天使用的流量
     yesterday = timezone.now() - timedelta(days=1)
-    traffic_list = TrafficRecord.objects.filter(create_date=yesterday).values('port', 'node_id')\
+    traffic_list = TrafficRecord.objects.filter(create_date=yesterday, type=0).values('port', 'node_id')\
         .annotate(sum_u=Sum(F('u') * F('rate') / 100, output_field=fields.IntegerField()),
         sum_d=Sum(F('d') * F('rate') / 100, output_field=fields.IntegerField())).order_by()
     tr_list = list()
@@ -38,7 +38,7 @@ def reset_all_users_transfer():
         tr_list.append(tr)
     TrafficRecord.objects.bulk_create(tr_list)
     # 2.删除7天前的流量记录，防止表数据过大
-    TrafficRecord.objects.filter(summary_date__lte=timezone.now() - timedelta(days=7)).delete()
+    TrafficRecord.objects.filter(summary_date__lte=timezone.now() - timedelta(days=7), type=0).delete()
 
 @shared_task(name='从节点API传来的流量数据更新到数据库')
 def update_users_transfer(data_list, node):
