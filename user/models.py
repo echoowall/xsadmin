@@ -263,7 +263,7 @@ class Attachment(AbstractAttachment):
         ordering = ['-uploaded']
 
 #流量记录
-class TrafficRecord(models.Model):
+class AbstractTrafficRecord(models.Model):
     u = models.BigIntegerField(verbose_name='上传流量', default=0)
     d = models.BigIntegerField(verbose_name='下载流量', default=0)
     create_date = models.DateField(verbose_name='产生的日期', auto_now_add=True)
@@ -272,13 +272,18 @@ class TrafficRecord(models.Model):
     type = models.PositiveSmallIntegerField(verbose_name='类型', default=0, help_text='0:接口自动记录类型；1/2 日/月汇总数据')
     summary_date = models.DateField(verbose_name='汇总产生日期', null=True, blank=True, default=None)
     port = models.PositiveSmallIntegerField(verbose_name='端口', blank=True, default=None)
+
+    class Meta:
+        abstract = True
+    def __str__(self):
+        return '[%d]%s'%(self.port, self.create_time)
+
+class TrafficRecord(AbstractTrafficRecord):
     node = models.ForeignKey(Node, null=True, verbose_name='所属节点', on_delete=models.CASCADE)
     class Meta:
         verbose_name = '流量记录'
         verbose_name_plural = verbose_name
         ordering = ['-id']
-    def __str__(self):
-        return '[%d]%s'%(self.port, self.create_time)
 
 #用户动作记录
 class ActionRecord(models.Model):
